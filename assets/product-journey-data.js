@@ -7,13 +7,13 @@ const planterStages=[
 ];
 const schematicPages=(id,count)=>Array.from({length:count},(_,i)=>`assets/product-stages/${id}/schematic-${i+1}.png`);
 export const productJourneys={
- planter:{name:'智能花盆',intro:'我会先梳理花盆的功能与模块，再依次呈现接线、原理图、PCB 布线和三维预览。每一步的说明和对应图片都会发在对话里，方便一起查看。',stages:planterStages.map(stage=>({...stage,images:['assets/planter-stages/'+stage.image]}))},
- badge:{name:'录音笔',intro:'先从录音笔的音频采集和手机连接开始。我会结合系统框图、电路原理图和结构参考，逐步整理方案，再继续确认模块连线与交付需求。',stages:[
+ planter:{name:'智能花盆',intro:'先整理花盆所需的功能与模块，并在右侧展示模块分布图。确认后再继续连线和电路方案，每个阶段的图片会随回答同步更新。',stages:planterStages.map(stage=>({...stage,images:['assets/planter-stages/'+stage.image]}))},
+ badge:{name:'录音笔',intro:'先梳理录音笔的音频采集、手机连接和供电模块。右侧会同步展示系统框图，确认连线后，再询问是否继续查看原理图与结构参考。',stages:[
   {id:'system',title:'电路系统框图',short:'系统框图',images:['assets/product-stages/badge/system.png'],copy:'先看录音笔的工作路径：数字麦克风采集音频，STM32 处理与管理状态，ESP32-S3 负责连接手机。下图把音频、通信、供电和操作模块放在一起，便于核对整体关系；microSD 对应离线存储预留。'},
   {id:'schematic',title:'电路原理图',short:'电路原理图',images:schematicPages('badge',6),copy:'接下来展开电路细节，逐页查看主控、音频采集、无线通信、存储与供电相关连接。原理图已按原文件整理为多页，点击图片可翻页和放大，具体信号与器件参数以工程复核为准。'},
   {id:'structure',title:'三维结构参考',short:'结构参考',images:['assets/product-stages/badge/structure.jpg'],copy:'再看机身的结构参考，核对按键、开关、接口和外壳的相对位置。图示用于讨论外观与操作位置，尺寸、装配间隙和加工方式仍需结合结构文件确认。接下来可以添加模块，继续完成连线与服务报价。'}
  ]},
- watch:{name:'智能手表',intro:'我会先整理智能手表的数据采集、显示触摸和手机连接关系，再结合原理图与实物外观参考逐步说明。对应图片会随说明出现在对话里。',stages:[
+ watch:{name:'智能手表',intro:'先整理智能手表的数据采集、显示触摸和手机连接模块。右侧会同步展示系统框图，确认连线后，再询问是否继续查看原理图与外观参考。',stages:[
   {id:'system',title:'电路系统框图',short:'系统框图',images:['assets/product-stages/watch/system.png'],copy:'先把腕上交互拆成感知、主控、显示触摸、无线通信和供电几部分。下图展示传感数据如何进入主控，再连接屏幕与手机；具体模块型号、总线和引脚仍需按实际硬件核对。'},
   {id:'schematic',title:'电路原理图',short:'电路原理图',images:schematicPages('watch',3),copy:'再逐页查看电路原理图中的器件与网络连接，把系统框图里的功能关系对应到具体电路。点击图片可以翻页和放大；供电、显示、传感与通信接口要结合实物 PCB 继续确认。'},
   {id:'appearance',title:'实物外观参考',short:'外观参考',images:['assets/product-stages/watch/structure.jpg'],copy:'最后结合现有实物照片查看表盘、表带和佩戴形态，作为外观与使用场景讨论的参考。照片不代表尺寸或装配已经验证；后续可继续核对外观偏好、模块连线与交付需求。'}

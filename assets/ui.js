@@ -1,4 +1,4 @@
-import {icon} from './icons.js?v=20261027-web-r3';
+import {icon} from './icons.js?v=20261027-web-r4';
 let focusBefore=null,onClosed=null;
 const modal=document.getElementById('modal');
 export function toast(text){const el=document.getElementById('toast');el.textContent=text;el.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.hidden=true,4200);}

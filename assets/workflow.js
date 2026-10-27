@@ -1,19 +1,20 @@
-import {localizedPrompt} from './i18n.js?v=20261027-web-r3';
-import {startProductJourney,stopProductJourney,productJourneyFor,hasProductJourney} from './product-journey.js?v=20261027-web-r3';
-import {assistantText} from './project-copy.js?v=20261027-web-r3';
-import {templateFor} from './product-templates.js?v=20261027-web-r3';
-import {productPreview} from './template-workbench.js?v=20261027-web-r3';
-import {icon,esc} from './icons.js?v=20261027-web-r3';
-import {state,currentFlow,persist,updateFlowName} from './store.js?v=20261027-web-r3';
-import {modulesFor,connectionsFor,allModules,allWires,layoutFor,money} from './workflow-data.js?v=20261027-web-r3';
-import {deviceVisual} from './editor-view.js?v=20261027-web-r3';
-import {toast,showModal,simpleModal,closeModal,download} from './ui.js?v=20261027-web-r3';
+import {localizedPrompt} from './i18n.js?v=20261027-web-r4';
+import {startProductJourney,stopProductJourney,answerProductQuestion,productJourneyFor,hasProductJourney} from './product-journey.js?v=20261027-web-r4';
+import {assistantText} from './project-copy.js?v=20261027-web-r4';
+import {templateFor} from './product-templates.js?v=20261027-web-r4';
+import {productPreview} from './template-workbench.js?v=20261027-web-r4';
+import {icon,esc} from './icons.js?v=20261027-web-r4';
+import {state,currentFlow,persist,updateFlowName} from './store.js?v=20261027-web-r4';
+import {modulesFor,connectionsFor,allModules,allWires,layoutFor,money} from './workflow-data.js?v=20261027-web-r4';
+import {deviceVisual} from './editor-view.js?v=20261027-web-r4';
+import {toast,showModal,simpleModal,closeModal,download} from './ui.js?v=20261027-web-r4';
 let hooks={};
 export function initWorkflow(api){hooks=api;}
 export function sendChat(text){
  const f=currentFlow();if(!f||f.busy||!text.trim())return;
  text=text.trim().slice(0,2000);f.messages.push({role:'user',text});f.chatDraft='';
  if(hasProductJourney(f)&&(!productJourneyFor(f)||/重新.*(生成|整理|设计)|重新开始/.test(text))){startProductJourney(f,hooks);return;}
+ if(answerProductQuestion(f,text))return;
  const wire=/接线|连线|连接|I2C|I²C/i.test(text)&&allModules(f);
  if(f.name==='未命名项目')updateFlowName(f,templateFor(f)?.name||'桌面温湿度显示器');
  f.updatedAt=Date.now();persist();f.busy=wire?'wire':'plan';hooks.renderEditor();
@@ -37,11 +38,11 @@ document.addEventListener('click',event=>{
  case 'view':f.view=value;persist();hooks.renderEditor();break;
  case 'canvas-mode':f.canvasMode=value;persist();hooks.renderEditor();break;
  case 'library':library();break;
- case 'add-module':if(modules.some(m=>m.id===value)&&!f.modules.includes(value)){f.modules.push(value);if(!f.selectedItems.includes(value))f.selectedItems.push(value);f.plan=true;f.stage='modules';persist();hooks.renderEditor();if(document.getElementById('modal').open)library();toast('器件已添加到画布');}break;
- case 'add-all':f.modules=modules.map(m=>m.id);f.selectedItems=modules.map(m=>m.id);f.stage='modules';persist();hooks.renderEditor();toast('已添加全部器件');break;
+ case 'add-module':f.canvasContent='hardware';if(modules.some(m=>m.id===value)&&!f.modules.includes(value)){f.modules.push(value);if(!f.selectedItems.includes(value))f.selectedItems.push(value);f.plan=true;f.stage='modules';persist();hooks.renderEditor();if(document.getElementById('modal').open)library();toast('器件已添加到画布');}break;
+ case 'add-all':f.canvasContent='hardware';f.modules=modules.map(m=>m.id);f.selectedItems=modules.map(m=>m.id);f.stage='modules';persist();hooks.renderEditor();toast('已添加全部器件');break;
  case 'remove-module':f.modules=f.modules.filter(id=>id!==value);f.wires=f.wires.filter(w=>w.from!==value&&w.to!==value);f.selected='';f.pendingPin=null;persist();hooks.renderEditor();toast('已移除器件及相关连线，可从器件库重新添加');break;
  case 'suggest-wires':sendChat('器件已经添加，请生成详细接线配置。');break;
- case 'connect-all':if(!allModules(f)){toast('请先添加全部器件');break;}f.wires=connections.map(c=>({...c}));f.pendingPin=null;f.stage='wired';persist();hooks.renderEditor();toast('全部连线已应用到画布');break;
+ case 'connect-all':f.canvasContent='hardware';if(!allModules(f)){toast('请先添加全部器件');break;}f.wires=connections.map(c=>({...c}));f.pendingPin=null;f.stage='wired';persist();hooks.renderEditor();toast('全部连线已应用到画布');break;
  case 'highlight-wire':f.highlight=value;hooks.renderEditor();setTimeout(()=>{const row=document.querySelector(`[data-wf="highlight-wire"][data-value="${value}"]`);row?.scrollIntoView({block:'nearest'});},0);break;
  case 'toggle-wire':f.pendingPin=null;hooks.renderEditor();toast('选择起点引脚，再选择另一个器件的对应引脚');break;
  case 'zoom-in':f.zoom=Math.min(1.3,Math.round((f.zoom+.1)*10)/10);persist();hooks.renderEditor();break;

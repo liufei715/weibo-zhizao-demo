@@ -1,11 +1,11 @@
-import {quoteServices,selectedQuoteServices,quoteAmount,quotationError,syncQuotationControls,updateQuoteServices} from './quotation.js?v=20261027-web-r3';
-import {templateFor} from './product-templates.js?v=20261027-web-r3';
-import {validateProductOrder} from './template-order.js?v=20261027-web-r3';
-import {icon,esc} from './icons.js?v=20261027-web-r3';
-import {state,currentFlow,persist,removeOrder} from './store.js?v=20261027-web-r3';
-import {modulesFor,allWires,money,total,selectedModules,regionHints} from './workflow-data.js?v=20261027-web-r3';
-import {bomView,purchaseList,addressForm,orderDetail} from './order-view.js?v=20261027-web-r3';
-import {showModal,closeModal,toast,download} from './ui.js?v=20261027-web-r3';
+import {quoteServices,selectedQuoteServices,quoteAmount,quotationError,syncQuotationControls,updateQuoteServices} from './quotation.js?v=20261027-web-r4';
+import {templateFor} from './product-templates.js?v=20261027-web-r4';
+import {validateProductOrder} from './template-order.js?v=20261027-web-r4';
+import {icon,esc} from './icons.js?v=20261027-web-r4';
+import {state,currentFlow,persist,removeOrder} from './store.js?v=20261027-web-r4';
+import {modulesFor,allWires,money,total,selectedModules,regionHints} from './workflow-data.js?v=20261027-web-r4';
+import {bomView,purchaseList,addressForm,orderDetail} from './order-view.js?v=20261027-web-r4';
+import {showModal,closeModal,toast,download} from './ui.js?v=20261027-web-r4';
 let hooks={},orderSubmitting=false;
 export function initOrders(api){hooks=api;}
 function openBom(){const f=currentFlow();showModal(bomView(f),'bom-dialog',()=>{if(state.page==='checkout'||state.page==='confirm')hooks.render();});updateBom();}

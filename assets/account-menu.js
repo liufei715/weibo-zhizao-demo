@@ -1,5 +1,5 @@
-import {userAvatar} from './avatar.js?v=20261027-web-r3';
-import {icon} from './icons.js?v=20261027-web-r3';
+import {userAvatar} from './avatar.js?v=20261027-web-r4';
+import {icon} from './icons.js?v=20261027-web-r4';
 
 export function accountControl(){
  return `<div class="account-control">

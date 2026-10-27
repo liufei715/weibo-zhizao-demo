@@ -1,4 +1,4 @@
-import {templateFor} from './product-templates.js?v=20261027-web-r3';
+import {templateFor} from './product-templates.js?v=20261027-web-r4';
 export const modules=[
  {id:'esp32',name:'ESP32-DevKitC',full:'ESP32-DevKitC 38 引脚 Type-C',role:'主控开发板',kind:'board',price:32,pins:['3V3','GND','GPIO21','GPIO22'],description:'连接传感器与显示屏的主控节点。'},
  {id:'sensor',name:'AHT10',full:'AHT10 温湿度传感器模块',role:'环境感知',kind:'sensor',price:6,pins:['VIN','GND','SDA','SCL'],description:'通过 I²C 总线读取温湿度。'},

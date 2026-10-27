@@ -1,9 +1,9 @@
-import {userAvatar} from './avatar.js?v=20261027-web-r3';
-import {icon,esc} from './icons.js?v=20261027-web-r3';
-import {art} from './artwork.js?v=20261027-web-r3';
-import {works,plugins} from './data.js?v=20261027-web-r3';
-import {state,persist,newFlow} from './store.js?v=20261027-web-r3';
-import {showModal,closeModal,toast,simpleModal} from './ui.js?v=20261027-web-r3';
+import {userAvatar} from './avatar.js?v=20261027-web-r4';
+import {icon,esc} from './icons.js?v=20261027-web-r4';
+import {art} from './artwork.js?v=20261027-web-r4';
+import {works,plugins} from './data.js?v=20261027-web-r4';
+import {state,persist,newFlow} from './store.js?v=20261027-web-r4';
+import {showModal,closeModal,toast,simpleModal} from './ui.js?v=20261027-web-r4';
 let hooks={},openWork=null,afterLogin=null;
 let authMode='login',authMethod='sms',authCodeSent=false,authTimer=null,authCountdown=0,authResetContact='';
 export function initDialogs(api){hooks=api;}

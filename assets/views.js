@@ -1,18 +1,18 @@
-import {isLocalizableProjectName} from './i18n.js?v=20261027-web-r3';
-import {creationComposer} from './creation-routes.js?v=20261027-web-r3';
-import {userAvatar} from './avatar.js?v=20261027-web-r3';
-import {orderNumber} from './project-copy.js?v=20261027-web-r3';
-import {productTemplates,templateById} from './product-templates.js?v=20261027-web-r3';
-import {templateSection,templatePicker} from './template-ui.js?v=20261027-web-r3';
-import {guideButton} from './ui.js?v=20261027-web-r3';
-import {projectCard} from './project-card.js?v=20261027-web-r3';
-import {lightFeatured} from './light-featured.js?v=20261027-web-r3';
-import { geekFloor } from './geek-figure.js?v=20261027-web-r3';
-import {creationRobot} from './creation-reveal.js?v=20261027-web-r3';
-import { engineeringVisual } from './engineering-visual.js?v=20261027-web-r3';
-import { icon,esc } from './icons.js?v=20261027-web-r3';
-import { art } from './artwork.js?v=20261027-web-r3';
-import { categories,works,kits,plugins } from './data.js?v=20261027-web-r3';
+import {isLocalizableProjectName} from './i18n.js?v=20261027-web-r4';
+import {creationComposer} from './creation-routes.js?v=20261027-web-r4';
+import {userAvatar} from './avatar.js?v=20261027-web-r4';
+import {orderNumber} from './project-copy.js?v=20261027-web-r4';
+import {productTemplates,templateById} from './product-templates.js?v=20261027-web-r4';
+import {templateSection,templatePicker} from './template-ui.js?v=20261027-web-r4';
+import {guideButton} from './ui.js?v=20261027-web-r4';
+import {projectCard} from './project-card.js?v=20261027-web-r4';
+import {lightFeatured} from './light-featured.js?v=20261027-web-r4';
+import { geekFloor } from './geek-figure.js?v=20261027-web-r4';
+import {creationRobot} from './creation-reveal.js?v=20261027-web-r4';
+import { engineeringVisual } from './engineering-visual.js?v=20261027-web-r4';
+import { icon,esc } from './icons.js?v=20261027-web-r4';
+import { art } from './artwork.js?v=20261027-web-r4';
+import { categories,works,kits,plugins } from './data.js?v=20261027-web-r4';
 
 export function card(w,state) {
   const liked=state.likes.includes(w.id);

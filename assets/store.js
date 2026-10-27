@@ -1,4 +1,4 @@
-import {templateById} from './product-templates.js?v=20261027-web-r3';
+import {templateById} from './product-templates.js?v=20261027-web-r4';
 const key='weibo-stack-prototype-v2';
 const sessionKey='weibo-stack-session-v1';
 let disk={},session={};

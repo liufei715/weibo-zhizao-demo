@@ -1,6 +1,6 @@
-import {state,currentFlow,persist} from './store.js?v=20261027-web-r3';
-import {connectionsFor,allWires} from './workflow-data.js?v=20261027-web-r3';
-import {toast} from './ui.js?v=20261027-web-r3';
+import {state,currentFlow,persist} from './store.js?v=20261027-web-r4';
+import {connectionsFor,allWires} from './workflow-data.js?v=20261027-web-r4';
+import {toast} from './ui.js?v=20261027-web-r4';
 let hooks={};
 export function initWiring(api){hooks=api;}
 export function drawWires(){
