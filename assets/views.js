@@ -1,22 +1,22 @@
-import {isLocalizableProjectName} from './i18n.js?v=20261027-web-r2';
-import {creationComposer} from './creation-routes.js?v=20261027-web-r2';
-import {userAvatar} from './avatar.js?v=20261027-web-r2';
-import {orderNumber} from './project-copy.js?v=20261027-web-r2';
-import {productTemplates,templateById} from './product-templates.js?v=20261027-web-r2';
-import {templateSection,templatePicker} from './template-ui.js?v=20261027-web-r2';
-import {guideButton} from './ui.js?v=20261027-web-r2';
-import {projectCard} from './project-card.js?v=20261027-web-r2';
-import {lightFeatured} from './light-featured.js?v=20261027-web-r2';
-import { geekFloor } from './geek-figure.js?v=20261027-web-r2';
-import {creationRobot} from './creation-reveal.js?v=20261027-web-r2';
-import { engineeringVisual } from './engineering-visual.js?v=20261027-web-r2';
-import { icon,esc } from './icons.js?v=20261027-web-r2';
-import { art } from './artwork.js?v=20261027-web-r2';
-import { categories,works,kits,plugins } from './data.js?v=20261027-web-r2';
+import {isLocalizableProjectName} from './i18n.js?v=20261027-web-r3';
+import {creationComposer} from './creation-routes.js?v=20261027-web-r3';
+import {userAvatar} from './avatar.js?v=20261027-web-r3';
+import {orderNumber} from './project-copy.js?v=20261027-web-r3';
+import {productTemplates,templateById} from './product-templates.js?v=20261027-web-r3';
+import {templateSection,templatePicker} from './template-ui.js?v=20261027-web-r3';
+import {guideButton} from './ui.js?v=20261027-web-r3';
+import {projectCard} from './project-card.js?v=20261027-web-r3';
+import {lightFeatured} from './light-featured.js?v=20261027-web-r3';
+import { geekFloor } from './geek-figure.js?v=20261027-web-r3';
+import {creationRobot} from './creation-reveal.js?v=20261027-web-r3';
+import { engineeringVisual } from './engineering-visual.js?v=20261027-web-r3';
+import { icon,esc } from './icons.js?v=20261027-web-r3';
+import { art } from './artwork.js?v=20261027-web-r3';
+import { categories,works,kits,plugins } from './data.js?v=20261027-web-r3';
 
 export function card(w,state) {
   const liked=state.likes.includes(w.id);
-  return `<article class="work-card"><div class="work-visual tone-${w.tone}"><button class="visual-link" data-open="${w.id}" aria-label="查看作品：${esc(w.name)}">${art(w.kind,w.subtitle)}</button><span class="art-label">${esc(w.tags[0])}</span><button class="like ${liked?'is-liked':''}" data-like="${w.id}" aria-label="${liked?'取消点赞':'点赞'}：${esc(w.name)}" aria-pressed="${liked}">${icon('heart',16)}<span>${w.likes+Number(liked)}</span></button></div><div class="work-body"><h3><button data-open="${w.id}">${esc(w.name)}</button></h3><p title="${esc(w.subtitle)}">${esc(w.subtitle)}</p><div class="work-meta"><button class="creator" data-creator="${esc(w.author)}">${userAvatar('avatar')}${esc(w.author)}</button><span class="counts" aria-label="${w.views}次浏览，${w.copies}次复制"><span>${icon('eye',14)}${w.views.toLocaleString()}</span><span>${icon('copy',13)}${w.copies}</span></span></div></div></article>`;
+  return `<article class="work-card"><div class="work-visual tone-${w.tone}"><button class="visual-link" data-open="${w.id}" aria-label="查看作品：${esc(w.name)}">${art(w.kind,w.subtitle)}</button><span class="art-label">${esc(w.tags[0])}</span><button class="like ${liked?'is-liked':''}" data-like="${w.id}" aria-label="${liked?'取消点赞':'点赞'}：${esc(w.name)}" aria-pressed="${liked}">${icon('heart',16)}<span>${w.likes+Number(liked)}</span></button></div><div class="work-body"><h3><button data-open="${w.id}">${esc(w.name)}</button></h3><p title="${esc(w.subtitle)}">${esc(w.subtitle)}</p><div class="work-meta"><button class="creator" data-creator="${esc(w.author)}">${userAvatar('avatar')}${esc(w.author)}</button>${state.page==='my'&&state.myTab==='saved'?`<button class="text-button saved-remove" data-bookmark="${w.id}" aria-label="取消收藏：${esc(w.name)}">取消收藏</button>`:`<span class="counts" aria-label="${w.views}次浏览，${w.copies}次复制"><span>${icon('eye',14)}${w.views.toLocaleString()}</span><span>${icon('copy',13)}${w.copies}</span></span>`}</div></div></article>`;
 }
 export function categoryBar(state){return `<div class="category-row"><div class="categories" role="group" aria-label="作品分类">${categories.map((c,i)=>`<button class="chip ${state.category===c?'active':''}" data-category="${c}" aria-pressed="${state.category===c}">${i<2?icon(i===0?'spark':'fire',16):''}${c}</button>`).join('')}</div><div class="capabilities" role="group" aria-label="作品能力筛选"><button class="chip ${state.code?'selected':''}" data-filter="code" aria-pressed="${state.code}">${icon('code',15)}含代码</button><button class="chip ${state.bom?'selected':''}" data-filter="bom" aria-pressed="${state.bom}">${icon('box',15)}可购 BOM</button></div></div>`;}
 export function featured(){return `<section class="featured-section" aria-label="精选灵感"><div class="section-heading"><h2>本周精选<span>编辑推荐</span></h2></div><div class="featured-grid"><button class="feature-hero" data-page="create"><div class="hero-copy"><h2>从一个想法，<br><span>到一件硬件。</span></h2><p>描述需求、选择器件、完成连线。<br>在同一个项目中整理设计与物料。</p><span class="hero-cta">开始硬件创作${icon('arrow',18)}</span></div>${engineeringVisual()}</button><button class="feature-tile tone-sand" data-open="gentle-light"><div><h3>桌面陪伴灯</h3><span class="tile-caption">查看作品${icon('arrow',16)}</span></div>${art('lamp','桌面陪伴灯')}</button><button class="feature-tile tone-stone" data-page="create"><div><h3>创建硬件项目</h3><span class="tile-caption">开始设计${icon('arrow',16)}</span></div><span class="tile-symbol">${icon('spark',88)}</span></button><button class="feature-tile tone-mint" data-page="resources"><div><h3>ESP32 入门</h3><span class="tile-caption">硬件入门指南${icon('arrow',16)}</span></div>${art('board','ESP32 开发板')}</button><button class="feature-tile feature-dark" data-info="community"><div><h3>开源创作者</h3><span class="tile-caption">认识创作者社区${icon('arrow',16)}</span></div><span class="orbit-art" aria-hidden="true"><i></i><b>W</b><i></i></span></button></div></section>`;}
@@ -30,7 +30,7 @@ export function myPage(state){
  const saved=works.filter(w=>state.bookmarks.includes(w.id)),projects=state.projects;
  const tabs=[['projects','我的项目',projects.length],['saved','我的收藏',saved.length],['orders','我的订单',state.orders.length]];
  let content='';
- if(state.myTab==='orders')content=state.orders.length?`<div class="order-history-list">${state.orders.map(o=>`<article class="order-history-row"><span><strong translate="${isLocalizableProjectName(o.projectName)?'yes':'no'}">${esc(o.projectName)}</strong><small>${esc(orderNumber(o.id))}</small></span><span class="status-pill">待报价确认</span><b>${o.amount===null?'待报价':'¥'+o.amount.toFixed(2)}</b><button class="text-button" data-wf="order-detail" data-value="${esc(o.id)}">查看详情${icon('arrow',16)}</button><button class="text-button order-delete" data-wf="order-delete" data-value="${esc(o.id)}">删除</button></article>`).join('')}</div>`:empty('还没有订单','完成方案设计与器件连线，整理需求后创建订单。','开始创作','create');
+ if(state.myTab==='orders')content=state.orders.length?`<div class="order-history-list">${state.orders.map(o=>`<article class="order-history-row"><div class="order-card-head"><div class="order-card-project"><strong translate="${isLocalizableProjectName(o.projectName)?'yes':'no'}">${esc(o.projectName)}</strong><small>${esc(orderNumber(o.id))}</small></div><span class="status-pill">待报价确认</span></div><div class="order-card-summary"><span>订单金额</span><b>${o.amount===null?'待报价':'¥'+o.amount.toFixed(2)}</b></div><div class="order-card-actions card-actions"><button class="secondary order-delete card-action-delete" data-wf="order-delete" data-value="${esc(o.id)}">删除</button><button class="primary order-card-detail" data-wf="order-detail" data-value="${esc(o.id)}">查看详情${icon('arrow',16)}</button></div></article>`).join('')}</div>`:empty('还没有订单','完成方案设计与器件连线，整理需求后创建订单。','开始创作','create');
  else if(state.myTab==='saved')content=saved.length?saved.map(w=>card(w,state)).join(''):empty('还没有收藏的作品','遇见喜欢的作品时，打开详情，把它收进你的灵感库。','去发现灵感');
  else content=projects.length?projects.map(p=>projectCard(p,state)).join(''):empty('第一个作品，从一个想法开始','从零开始，或把社区作品复制到自己的工作区。','开始创作','create');
  return `<div class="page-intro"><div class="workspace-identity">${userAvatar('workspace-avatar')}<div><h1>我的工作区</h1><p>管理项目、收藏与订单。</p></div></div><button class="primary" data-page="create">${icon('plus',17)}新建项目</button></div><div class="my-tabs" role="group" aria-label="我的内容">${tabs.map(([id,title,count])=>`<button data-my-tab="${id}" class="chip ${state.myTab===id?'active':''}" aria-pressed="${state.myTab===id}">${title}<span>${count}</span></button>`).join('')}</div><div class="work-grid">${content}</div>`;

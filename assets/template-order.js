@@ -1,7 +1,7 @@
-import {isLocalizableUsage} from './i18n.js?v=20261027-web-r2';
-import {templateFor} from './product-templates.js?v=20261027-web-r2';
-import {icon,esc} from './icons.js?v=20261027-web-r2';
-import {allWires} from './workflow-data.js?v=20261027-web-r2';
+import {isLocalizableUsage} from './i18n.js?v=20261027-web-r3';
+import {templateFor} from './product-templates.js?v=20261027-web-r3';
+import {icon,esc} from './icons.js?v=20261027-web-r3';
+import {allWires} from './workflow-data.js?v=20261027-web-r3';
 export const deliveryOptions={assembled:'装配样机',kit:'模块套件',custom:'定制方案'};
 export const finishOptions=['按原方案','白色','黑色','其他，见备注'];
 export const scheduleOptions=['待沟通','优先打样','按项目排期'];

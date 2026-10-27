@@ -1,9 +1,9 @@
-import {userAvatar} from './avatar.js?v=20261027-web-r2';
-import {icon,esc} from './icons.js?v=20261027-web-r2';
-import {art} from './artwork.js?v=20261027-web-r2';
-import {works,plugins} from './data.js?v=20261027-web-r2';
-import {state,persist,newFlow} from './store.js?v=20261027-web-r2';
-import {showModal,closeModal,toast,simpleModal} from './ui.js?v=20261027-web-r2';
+import {userAvatar} from './avatar.js?v=20261027-web-r3';
+import {icon,esc} from './icons.js?v=20261027-web-r3';
+import {art} from './artwork.js?v=20261027-web-r3';
+import {works,plugins} from './data.js?v=20261027-web-r3';
+import {state,persist,newFlow} from './store.js?v=20261027-web-r3';
+import {showModal,closeModal,toast,simpleModal} from './ui.js?v=20261027-web-r3';
 let hooks={},openWork=null,afterLogin=null;
 let authMode='login',authMethod='sms',authCodeSent=false,authTimer=null,authCountdown=0,authResetContact='';
 export function initDialogs(api){hooks=api;}
@@ -52,7 +52,7 @@ document.addEventListener('click',async event=>{
  if(button.dataset.lesson){simpleModal(button.dataset.lesson==='first'?'从零认识 AI 硬件创造':'设计你的第一个屏幕交互',`<p>这是一份图文入门路线，帮助你理解硬件创作的关键步骤。</p><ol><li>明确希望解决的场景与用户任务</li><li>认识输入、计算与输出模块</li><li>理解供电、共地与数据线</li><li>用小规模示例验证交互，再核对真实器件资料</li></ol><button class="primary" data-page="create">动手试试看${icon('arrow',16)}</button>`,'MAKER ACADEMY');}
  if(button.dataset.creator){const items=works.filter(w=>w.author===button.dataset.creator);simpleModal(esc(button.dataset.creator),`<p>社区创作者 · 专注于日常硬件与交互探索。</p><h3>作品</h3>${items.map(w=>`<p><button class="text-button" data-open="${w.id}">${esc(w.name)}${icon('arrow',16)}</button></p>`).join('')}`,'CREATOR PROFILE');}
  if(button.dataset.like||button.dataset.detailLike){const id=button.dataset.like||button.dataset.detailLike;requireAuth(()=>{state.likes=state.likes.includes(id)?state.likes.filter(x=>x!==id):[...state.likes,id];persist();hooks.updateResults();if(button.dataset.detailLike){button.setAttribute('aria-pressed',String(state.likes.includes(id)));button.innerHTML=icon('heart',16)+(works.find(w=>w.id===id).likes+Number(state.likes.includes(id)));}else if(state.page==='resources')hooks.render();});}
- if(button.dataset.bookmark){const id=button.dataset.bookmark;requireAuth(()=>{state.bookmarks=state.bookmarks.includes(id)?state.bookmarks.filter(x=>x!==id):[...state.bookmarks,id];persist();detail(id);toast(state.bookmarks.includes(id)?'已加入收藏':'已取消收藏');});}
+ if(button.dataset.bookmark){const id=button.dataset.bookmark;requireAuth(()=>{state.bookmarks=state.bookmarks.includes(id)?state.bookmarks.filter(x=>x!==id):[...state.bookmarks,id];persist();if(state.page==='my'&&state.myTab==='saved'){hooks.render();}else{detail(id);}toast(state.bookmarks.includes(id)?'已加入收藏':'已取消收藏');});}
  if(button.dataset.copyProject){const w=works.find(w=>w.id===button.dataset.copyProject);requireAuth(()=>{const flow=newFlow(w.subtitle,w.name+' · 我的副本');flow.messages.push({role:'assistant',text:'已创建作品副本，可继续补充需求、添加器件和完成连线。'});flow.plan=true;persist();closeModal();hooks.navigate('editor');});}
  if(button.dataset.projectPreview){const w=works.find(w=>w.id===button.dataset.projectPreview);requireAuth(()=>simpleModal('作品预览',`<div class="preview-product tone-${w.tone}">${art(w.kind,w.subtitle)}</div><p>${esc(w.subtitle)}</p><button class="primary" data-copy-project="${w.id}">复制并继续创作${icon('arrow',16)}</button>`));}
  if(button.dataset.share){const inputUrl=new URL(location.href);inputUrl.searchParams.set('project',button.dataset.share);try{await navigator.clipboard.writeText(inputUrl.href);toast('作品链接已复制');}catch{simpleModal('分享作品',`<p>复制以下链接，打开即可查看作品。</p><input class="share-input" value="${esc(inputUrl.href)}" readonly aria-label="作品分享链接">`);}}

@@ -1,5 +1,5 @@
-import {icon,esc} from './icons.js?v=20261027-web-r2';
-import {productTemplates,templateById} from './product-templates.js?v=20261027-web-r2';
+import {icon,esc} from './icons.js?v=20261027-web-r3';
+import {productTemplates,templateById} from './product-templates.js?v=20261027-web-r3';
 
 export const creationRoutes=[
  {id:'boutique',enabled:true,icon:'gem',label:'精品路线',placeholder:'选择下方成熟产品，描述你希望调整的功能和使用场景……'},

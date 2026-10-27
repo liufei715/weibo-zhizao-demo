@@ -1,4 +1,4 @@
-import { esc } from './icons.js?v=20261027-web-r2';
+import { esc } from './icons.js?v=20261027-web-r3';
 let serial=0;
 // Code-native illustrations extend the product sketches in the existing prototype.
 export function art(kind='robot', label='硬件产品外观示意', className='') {

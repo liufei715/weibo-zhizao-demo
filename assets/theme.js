@@ -1,4 +1,4 @@
-import {icon} from './icons.js?v=20261027-web-r2';
+import {icon} from './icons.js?v=20261027-web-r3';
 export function themeControl(theme){const dark=theme==='engineering',next=dark?'light':'engineering',label=dark?'切换为浅色风格':'切换为深色工程风';return `<button class="theme-switch icon-button" data-theme-toggle data-theme-choice="${next}" aria-label="${label}" title="${label}">${icon(dark?'sun':'moon',18)}</button>`;}
 export function applyTheme(theme,save=false){
  const value=theme==='engineering'?'engineering':'light';

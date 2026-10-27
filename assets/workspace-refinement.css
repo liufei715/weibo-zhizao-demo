@@ -14,3 +14,12 @@
 .project-card .draft-meta .text-button{min-height:36px}
 html[data-theme="engineering"] .project-card .draft-icon,
 html[data-theme="engineering"] .project-card .status-pill{background:#ffffff06;color:#bbc2d0}
+
+/* Shared primary and secondary actions for project and order cards. */
+.project-card .draft-meta{flex-wrap:wrap;gap:var(--wb-space-16)}
+.card-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:var(--wb-space-16);max-width:100%}
+.project-card .project-card-actions{margin-left:auto}
+.card-actions>button{flex-shrink:0;min-height:var(--wb-control-height);padding:var(--wb-space-8) var(--wb-space-16);font-size:12px}
+.card-actions .card-action-delete.secondary{font-size:12px;color:var(--wb-text-secondary);background:transparent;border:1px solid var(--wb-border-control);box-shadow:none}
+.card-actions .card-action-delete.secondary:hover{color:var(--wb-danger);border-color:currentColor}
+.card-actions .card-action-delete.secondary:active{background:var(--wb-surface-subtle)}
