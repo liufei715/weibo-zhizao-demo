@@ -1,6 +1,6 @@
-import {icon,esc} from './icons.js?v=product-ui-v17';
-import {state,persist} from './store.js?v=product-ui-v17';
-import {showModal} from './ui.js?v=product-ui-v17';
+import {icon,esc} from './icons.js?v=20261027-web-r2';
+import {state,persist} from './store.js?v=20261027-web-r2';
+import {showModal} from './ui.js?v=20261027-web-r2';
 
 // Visible design summaries accompany the user-provided illustrations.
 export const planterStages=[

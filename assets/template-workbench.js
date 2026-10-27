@@ -1,5 +1,5 @@
-import {templateFor} from './product-templates.js?v=product-ui-v17';
-import {icon,esc} from './icons.js?v=product-ui-v17';
-import {allModules} from './workflow-data.js?v=product-ui-v17';
+import {templateFor} from './product-templates.js?v=20261027-web-r2';
+import {icon,esc} from './icons.js?v=20261027-web-r2';
+import {allModules} from './workflow-data.js?v=20261027-web-r2';
 export function productPlan(flow){const t=templateFor(flow);return `<div class="ai-plan product-plan"><div class="plan-heading"><span>${icon('cpu',17)}${t.name}方案</span></div><button class="product-plan-cover" data-template-detail="${t.id}" aria-label="查看${t.name}方案详情"><img src="${t.image}" alt="${esc(t.imageAlt)}"><span>查看方案详情${icon('external',14)}</span></button><p>${t.summary}</p><div class="product-module-list">${t.modules.map(m=>`<button data-wf="add-module" data-value="${m.id}" ${flow.modules.includes(m.id)?'disabled':''}><span><strong>${m.name}</strong><small>${m.role}</small></span>${icon(flow.modules.includes(m.id)?'check':'plus',16)}</button>`).join('')}</div><div class="plan-footer"><span>模块清单<b>价格待核定</b></span><button class="primary" data-wf="add-all" ${allModules(flow)?'disabled':''}>${icon(allModules(flow)?'check':'plus',15)}${allModules(flow)?'已全部添加':'全部添加'}</button></div><p class="template-source-note">${t.note}</p></div>`;}
 export function productPreview(flow){const t=templateFor(flow);return `<div class="product-flow-preview"><img src="${t.image}" alt="${esc(t.imageAlt)}"><div><span class="status-pill">方案连线已整理</span><h3>${t.name}</h3><p>${t.summary}</p><p>${t.wireNote}</p><button class="primary" data-wf="bom">确认备料，继续下单${icon('arrow',16)}</button></div></div>`;}

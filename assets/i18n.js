@@ -1,6 +1,6 @@
-import {icon} from './icons.js?v=language-icon-v2';
-import {productTemplates} from './product-templates.js?v=product-ui-v17';
-import {english} from './i18n-messages.js?v=1';
+import {icon} from './icons.js?v=20261027-web-r2';
+import {productTemplates} from './product-templates.js?v=20261027-web-r2';
+import {english} from './i18n-messages.js?v=20261027-web-r2';
 
 const storageKey='weibo-interface-language';
 const attributes=['aria-label','aria-description','title','placeholder','alt'];

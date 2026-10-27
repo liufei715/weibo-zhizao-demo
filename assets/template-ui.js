@@ -1,5 +1,5 @@
-import {productTemplates,templateById} from './product-templates.js?v=product-ui-v17';
-import {icon,esc} from './icons.js?v=product-ui-v17';
+import {productTemplates,templateById} from './product-templates.js?v=20261027-web-r2';
+import {icon,esc} from './icons.js?v=20261027-web-r2';
 export function templateSection(state){return `<section class="product-templates" aria-labelledby="template-title"><div class="section-heading"><h2 id="template-title">从产品方案开始<span>复用成熟方案，继续你的设计</span></h2></div><div class="template-grid">${productTemplates.map(t=>templateCard(t,state)).join('')}</div></section>`;}
 function templateCard(t,state){
  const liked=state.likes.includes('template:'+t.id);

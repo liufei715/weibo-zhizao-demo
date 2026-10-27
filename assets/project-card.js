@@ -1,6 +1,6 @@
-import {isLocalizableProjectName} from './i18n.js?v=1';
-import {icon,esc} from './icons.js?v=product-ui-v17';
-import {connectionsFor} from './workflow-data.js?v=product-ui-v17';
+import {isLocalizableProjectName} from './i18n.js?v=20261027-web-r2';
+import {icon,esc} from './icons.js?v=20261027-web-r2';
+import {connectionsFor} from './workflow-data.js?v=20261027-web-r2';
 
 export function projectCard(project,state){
  const id=project.flowId||project.id;

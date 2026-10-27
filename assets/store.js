@@ -1,4 +1,4 @@
-import {templateById} from './product-templates.js?v=product-ui-v17';
+import {templateById} from './product-templates.js?v=20261027-web-r2';
 const key='weibo-stack-prototype-v2';
 const sessionKey='weibo-stack-session-v1';
 let disk={},session={};
@@ -9,24 +9,36 @@ export const state={
   theme:document.documentElement.dataset.theme||'light',
   page:new URLSearchParams(location.search).get('page')||'discover',
   category:'发现',code:false,bom:false,query:'',sort:'newest',myTab:'projects',collapsed:false,
-  likes:list(disk.likes),bookmarks:list(disk.bookmarks),comments:disk.comments||{},projects:list(disk.projects),orders:list(disk.orders),
+  likes:list(disk.likes),bookmarks:list(disk.bookmarks),comments:disk.comments||{},projects:list(disk.projects),orders:list(disk.orders),deletedOrderIds:list(disk.deletedOrderIds),
   flows:disk.flows||{},flowId:disk.flowId||'',idea:disk.idea||'',templateId:templateById(disk.templateId)?disk.templateId:'planter',
   auth:session.auth===true,addresses:list(session.addresses),addressId:session.addressId||'',orderAddresses:session.orderAddresses||{},
   balance:Number.isFinite(disk.balance)?disk.balance:500,storageError:false,revision:disk.revision||0,
 };
+function applyOrderDeletions(){
+ const deleted=new Set(state.deletedOrderIds);
+ state.orders=state.orders.filter(order=>!deleted.has(order.id));
+ for(const id of deleted)delete state.orderAddresses[id];
+ for(const flow of Object.values(state.flows))if(deleted.has(flow.lastOrderId)){
+  delete flow.lastOrderId;delete flow.lastOrderToken;delete flow.checkoutToken;
+  if(flow.stage==='ordered')flow.stage='design';
+ }
+}
+applyOrderDeletions();
 export function persist(){
   try{
     // Preserve work on other projects when several desktop tabs are open.
     const latestRaw=localStorage.getItem(key)||'{}';
     let latest={};
     try{latest=JSON.parse(latestRaw)||{};}catch{}
+    state.deletedOrderIds=[...new Set([...state.deletedOrderIds,...list(latest.deletedOrderIds)])];
     const baseline=JSON.parse(savedFlows);
     for(const [id,flow] of Object.entries(latest.flows||{})){
       if(!state.flows[id]||JSON.stringify(state.flows[id])===JSON.stringify(baseline[id]))state.flows[id]=flow;
     }
     for(const field of ['projects','orders']){const ids=new Set(state[field].map(item=>item.id));for(const item of list(latest[field]))if(!ids.has(item.id))state[field].push(item);}
-    const {likes,bookmarks,comments,projects,orders,flows,flowId,idea,templateId,balance}=state;
-    const revision=Date.now();localStorage.setItem(key,JSON.stringify({likes,bookmarks,comments,projects,orders,flows,flowId,idea,templateId,balance,revision}));savedFlows=JSON.stringify(flows);state.revision=revision;sessionStorage.setItem(sessionKey,JSON.stringify({auth:state.auth,addresses:state.addresses,addressId:state.addressId,orderAddresses:state.orderAddresses}));state.storageError=false;return true;
+    applyOrderDeletions();
+    const {likes,bookmarks,comments,projects,orders,deletedOrderIds,flows,flowId,idea,templateId,balance}=state;
+    const revision=Date.now();localStorage.setItem(key,JSON.stringify({likes,bookmarks,comments,projects,orders,deletedOrderIds,flows,flowId,idea,templateId,balance,revision}));savedFlows=JSON.stringify(flows);state.revision=revision;sessionStorage.setItem(sessionKey,JSON.stringify({auth:state.auth,addresses:state.addresses,addressId:state.addressId,orderAddresses:state.orderAddresses}));state.storageError=false;return true;
   }catch{state.storageError=true;return false;}
 }
 export function currentFlow(){return state.flows[state.flowId];}
@@ -39,6 +51,7 @@ export function newFlow(idea='',source='',templateId=''){
   state.flowId=id;state.flows[id]=flow;state.projects.unshift({id,name,source,flowId:id});persist();return flow;
 }
 export function updateFlowName(flow,name){flow.name=name.trim().slice(0,60)||'未命名项目';const project=state.projects.find(p=>p.id===flow.id);if(project)project.name=flow.name;persist();}
+export function removeOrder(orderId){const index=state.orders.findIndex(order=>order.id===orderId);if(index<0)return false;state.deletedOrderIds=[...new Set([...state.deletedOrderIds,orderId])];applyOrderDeletions();return persist();}
 export const defaultCode=`// 蔚博智造 · 温湿度显示器
 // 编译与烧录前请核对目标开发板、依赖库及引脚配置。
 #include <Wire.h>

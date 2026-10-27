@@ -1,13 +1,13 @@
-import {localizedPrompt} from './i18n.js?v=1';
-import {startProductJourney,stopProductJourney,productJourneyFor,hasProductJourney} from './product-journey.js?v=product-images-v2';
-import {assistantText} from './project-copy.js?v=product-ui-v17';
-import {templateFor} from './product-templates.js?v=product-ui-v17';
-import {productPreview} from './template-workbench.js?v=product-ui-v17';
-import {icon,esc} from './icons.js?v=product-ui-v17';
-import {state,currentFlow,persist,updateFlowName} from './store.js?v=product-ui-v17';
-import {modulesFor,connectionsFor,allModules,allWires,layoutFor,money} from './workflow-data.js?v=product-ui-v17';
-import {deviceVisual} from './editor-view.js?v=product-flow-v5';
-import {toast,showModal,simpleModal,closeModal,download} from './ui.js?v=product-ui-v17';
+import {localizedPrompt} from './i18n.js?v=20261027-web-r2';
+import {startProductJourney,stopProductJourney,productJourneyFor,hasProductJourney} from './product-journey.js?v=20261027-web-r2';
+import {assistantText} from './project-copy.js?v=20261027-web-r2';
+import {templateFor} from './product-templates.js?v=20261027-web-r2';
+import {productPreview} from './template-workbench.js?v=20261027-web-r2';
+import {icon,esc} from './icons.js?v=20261027-web-r2';
+import {state,currentFlow,persist,updateFlowName} from './store.js?v=20261027-web-r2';
+import {modulesFor,connectionsFor,allModules,allWires,layoutFor,money} from './workflow-data.js?v=20261027-web-r2';
+import {deviceVisual} from './editor-view.js?v=20261027-web-r2';
+import {toast,showModal,simpleModal,closeModal,download} from './ui.js?v=20261027-web-r2';
 let hooks={};
 export function initWorkflow(api){hooks=api;}
 export function sendChat(text){

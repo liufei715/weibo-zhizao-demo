@@ -1,13 +1,13 @@
-import {languageControl} from './i18n.js?v=1';
-import {productStageMessage,productThinking,productProgress,productJourneyFor,hasProductJourney} from './product-journey.js?v=product-images-v2';
-import {userAvatar} from './avatar.js?v=product-ui-v17';
-import {assistantText} from './project-copy.js?v=product-ui-v17';
-import {templateFor} from './product-templates.js?v=product-ui-v17';
-import {productPlan} from './template-workbench.js?v=product-ui-v17';
-import {themeControl} from './theme.js?v=product-ui-v17';
-import {icon,esc} from './icons.js?v=product-ui-v17';
-import {art} from './artwork.js?v=product-ui-v17';
-import {modulesFor,connectionsFor,allModules,allWires,money,total} from './workflow-data.js?v=product-ui-v17';
+import {languageControl} from './i18n.js?v=20261027-web-r2';
+import {productStageMessage,productThinking,productProgress,productJourneyFor,hasProductJourney} from './product-journey.js?v=20261027-web-r2';
+import {userAvatar} from './avatar.js?v=20261027-web-r2';
+import {assistantText} from './project-copy.js?v=20261027-web-r2';
+import {templateFor} from './product-templates.js?v=20261027-web-r2';
+import {productPlan} from './template-workbench.js?v=20261027-web-r2';
+import {themeControl} from './theme.js?v=20261027-web-r2';
+import {icon,esc} from './icons.js?v=20261027-web-r2';
+import {art} from './artwork.js?v=20261027-web-r2';
+import {modulesFor,connectionsFor,allModules,allWires,money,total} from './workflow-data.js?v=20261027-web-r2';
 
 export function deviceVisual(kind){
  if(kind==='module')return `<span class="module-symbol">${icon('cpu',32)}</span>`;

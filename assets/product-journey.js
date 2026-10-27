@@ -1,7 +1,7 @@
-import {icon,esc} from './icons.js?v=product-ui-v17';
-import {state,persist} from './store.js?v=product-ui-v17';
-import {showModal} from './ui.js?v=product-ui-v17';
-import {journeyConfig,productJourneys} from './product-journey-data.js?v=product-images-v2';
+import {icon,esc} from './icons.js?v=20261027-web-r2';
+import {state,persist} from './store.js?v=20261027-web-r2';
+import {showModal} from './ui.js?v=20261027-web-r2';
+import {journeyConfig,productJourneys} from './product-journey-data.js?v=20261027-web-r2';
 
 // Visible summaries describe supplied project images; no generation or electrical validation is implied.
 const timers=new Map();
