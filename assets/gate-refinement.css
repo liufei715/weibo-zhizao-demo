@@ -1,0 +1,14 @@
+/* Keep the gate actions visually grouped without collapsing the primary and secondary controls. */
+.gate-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--wb-space-16, 16px);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 520px) {
+  .gate-actions {
+    gap: var(--wb-space-12, 12px);
+  }
+}

@@ -1,0 +1,63 @@
+/* Decorative motion stays in the idea page, outside the wiring workspace. */
+.creation-scene {
+  --figure-breath-duration: 7s;
+  --figure-drift-duration: 9s;
+}
+.creation-scene .figure-portrait-motion {
+  transform-box: fill-box;
+  transform-origin: 48% 90%;
+  animation: figure-breathe var(--figure-breath-duration) ease-in-out infinite;
+}
+.creation-scene .figure-hand-motion {
+  transform-box: fill-box;
+  transform-origin: 10% 70%;
+  animation: figure-gesture 6s ease-in-out infinite;
+}
+.creation-scene .figure-head-orbits {
+  animation: figure-ribbon 8s ease-in-out infinite;
+}
+.creation-scene .figure-nodes > * {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: figure-node-drift var(--figure-drift-duration) ease-in-out infinite;
+}
+.creation-scene .figure-nodes > :nth-child(2n) {animation-delay:-3s;animation-duration:7s}
+.creation-scene .figure-nodes > :nth-child(3n) {animation-delay:-5s;animation-duration:11s}
+.creation-scene .figure-celestial {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: figure-celestial-drift 12s ease-in-out infinite;
+}
+.creation-scene .figure-orbits {
+  animation: figure-orbit-drift 10s ease-in-out infinite;
+}
+.creation-scene .figure-orbits-front {animation-delay:-4s}
+/* Hold the illustration steady while the user writes or chooses an action. */
+.creation-scene:focus-within .geek-figure * {animation-play-state:paused}
+@keyframes figure-breathe {
+  0%,100% {transform:translateY(0) rotate(-.35deg)}
+  50% {transform:translateY(-5px) rotate(.45deg)}
+}
+@keyframes figure-gesture {
+  0%,100% {transform:translateY(0) rotate(-1deg)}
+  50% {transform:translateY(-4px) rotate(1.6deg)}
+}
+@keyframes figure-ribbon {
+  0%,100% {transform:translate(0,0)}
+  50% {transform:translate(3px,-3px)}
+}
+@keyframes figure-node-drift {
+  0%,100% {transform:translate(0,0) rotate(-3deg)}
+  50% {transform:translate(3px,-8px) rotate(5deg)}
+}
+@keyframes figure-celestial-drift {
+  0%,100% {transform:translateY(0) rotate(-2deg)}
+  50% {transform:translateY(-6px) rotate(3deg)}
+}
+@keyframes figure-orbit-drift {
+  0%,100% {transform:translate(0,0)}
+  50% {transform:translate(5px,-3px)}
+}
+@media (prefers-reduced-motion:reduce) {
+  .creation-scene .geek-figure * {animation:none!important}
+}

@@ -1,0 +1,63 @@
+/* Creation progress: keep the workflow visible without turning it into a banner. */
+.creation-scene .creation-steps {
+  width: 100%;
+  max-width: none;
+  margin: 24px 0 0;
+  padding: 0;
+  gap: 10px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.creation-scene .creation-steps > li {
+  justify-content: center;
+  gap: 8px;
+}
+
+.creation-scene .creation-steps > li:not(:last-child)::after {
+  width: clamp(8px, 1.5vw, 18px);
+  background: var(--creation-progress-line);
+}
+
+.creation-scene .creation-steps .step-marker {
+  width: 22px;
+  height: 22px;
+  flex-basis: 22px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.creation-scene .creation-steps .active .step-marker {
+  box-shadow: 0 0 0 3px rgb(35 72 197 / 10%);
+}
+
+.creation-scene .creation-steps .step-label {
+  font-size: 11px;
+  letter-spacing: .01em;
+}
+
+html[data-theme="engineering"] .creation-scene .creation-steps .active .step-marker {
+  box-shadow: 0 0 0 3px rgb(202 216 255 / 10%);
+}
+
+@media (max-width: 1250px) {
+  .creation-scene .creation-steps {
+    gap: 6px;
+    padding-inline: 0;
+  }
+
+  .creation-scene .creation-steps > li {
+    gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .creation-scene .creation-steps {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

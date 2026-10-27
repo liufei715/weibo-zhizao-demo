@@ -1,0 +1,63 @@
+/* One shared icon toggles both visual themes across pages and the editor. */
+.theme-switch.icon-button{display:inline-flex;align-items:center;justify-content:center;width:40px;min-width:40px;height:40px;min-height:40px;padding:0;flex-shrink:0;border:1px solid var(--wb-p-gray-200);border-radius:var(--wb-radius-control);background:var(--wb-surface);color:var(--wb-text-secondary)}
+.theme-switch.icon-button:hover{color:var(--wb-action);background:var(--wb-info-bg)}
+.theme-switch.icon-button:active{transform:translateY(1px)}
+html[data-theme="engineering"] .theme-switch.icon-button{background:var(--eng-field);border-color:var(--eng-control-line);color:var(--eng-accent)}
+html[data-theme="engineering"] .theme-switch.icon-button:hover{background:var(--eng-selected)}
+.creation-backdrop,.canvas-backdrop{display:block}
+.editor-header .theme-switch{margin-left:0}
+@media(max-width:1250px){.editor-header .project-title input{width:220px}}
+
+/* Line figure inspired by the supplied visual reference; remains behind task content. */
+.geek-figure {display:block;width:100%;height:100%;pointer-events:none;overflow:visible}
+.figure-floor {stroke:#55718f;stroke-width:.7;opacity:.22}
+.figure-orbits,.figure-head-orbits {stroke:#a6bcd5;stroke-width:1;opacity:.65}
+.figure-person {stroke:#c0d1e4;stroke-width:1.05;stroke-linecap:round;stroke-linejoin:round;opacity:.86}
+.figure-nodes {stroke:#a9bdd4;stroke-width:1.2}
+.figure-nodes .node-blue {fill:#668aff;stroke:none}
+.figure-nodes .node-cyan {fill:#70d5e8;stroke:none}
+.figure-nodes .node-lime {fill:#c5de95;stroke:none}
+.figure-nodes circle {fill:#c0d1e4;stroke:none}.figure-star {stroke:#91b2dd}
+.canvas-backdrop {position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.canvas-backdrop .geek-figure {position:absolute;width:105%;height:105%;left:-6%;bottom:-2%;opacity:.3}
+.canvas-world {z-index:1}.stage-context {z-index:3}.canvas-empty,.canvas-axis {z-index:2}
+.creation-body #main {position:relative;isolation:isolate;overflow:hidden;min-height:calc(100vh - 150px)}
+.creation-body #main>.creation-backdrop {position:absolute;inset:65px -90px 0;z-index:-1;pointer-events:none;opacity:.45}
+.creation-body #main>.creation-backdrop .geek-figure {width:100%;height:100%}
+.creation-body .idea-form {position:relative}
+.creation-body .create-intro {position:relative}
+@media (prefers-reduced-motion:reduce) {.geek-figure {animation:none}}
+
+/* Light theme uses blue-gray linework against the pale canvas. */
+html[data-theme="light"] .figure-floor{stroke:#8e9cb5;opacity:.28}
+html[data-theme="light"] .figure-orbits,html[data-theme="light"] .figure-head-orbits{stroke:#526888;opacity:.68}
+html[data-theme="light"] .figure-person{stroke:#536b8b}
+html[data-theme="light"] .figure-nodes{stroke:#637a9a}
+html[data-theme="light"] .figure-nodes .node-blue{fill:#173ded}
+html[data-theme="light"] .figure-nodes .node-cyan{fill:#268497}
+html[data-theme="light"] .figure-nodes .node-lime{fill:#7d943d}
+html[data-theme="light"] .figure-nodes circle{fill:#637a9a}
+html[data-theme="light"] .figure-star{stroke:#6683a7}
+html[data-theme="light"] .canvas-backdrop .geek-figure{opacity:.4}
+html[data-theme="light"] .creation-backdrop{opacity:.5}
+
+/* Reference details: ribbon end caps, solid ear and neck insets, purple node. */
+.figure-ribbons{stroke-width:1.05;stroke-linejoin:round;stroke-linecap:round;opacity:.9}
+.figure-solid{fill:#c0d1e4;stroke:none;opacity:.9}
+.figure-nodes .node-purple{fill:#ae19e8;stroke:none}
+.figure-orbits-back{opacity:.55}
+.figure-orbits-front{opacity:.8;stroke-linecap:round}
+html[data-theme="light"] .figure-solid{fill:#637a9a}
+html[data-theme="light"] .figure-nodes .node-purple{fill:#8e35c5}
+/* Light gray in the light theme, charcoal in the dark theme; neutral focus ring. */
+:root{--idea-writing-bg:#f0f1f5;--idea-writing-text:#172033;--idea-writing-muted:#616d82;--idea-writing-focus:#8b94a5;--idea-writing-scheme:light}
+html[data-theme="engineering"]{--idea-writing-bg:#101115;--idea-writing-text:#eef0f5;--idea-writing-muted:#a4aab8;--idea-writing-focus:#828a9b;--idea-writing-scheme:dark}
+.creation-body .idea-form textarea{display:block;background:var(--idea-writing-bg);color:var(--idea-writing-text);caret-color:var(--idea-writing-text);border:0;border-radius:10px;padding:16px;outline:none;box-shadow:none;color-scheme:var(--idea-writing-scheme)}
+.creation-body .idea-form textarea::placeholder{color:var(--idea-writing-muted)}
+.creation-body .idea-form textarea:focus-visible{outline:none;box-shadow:inset 0 0 0 1px var(--idea-writing-focus)}
+
+/* A single reusable guide button, matching the supplied book-and-pill reference. */
+.guide-button.secondary{min-height:46px;padding:10px 23px;gap:9px;border:0;border-radius:999px;background:#fff;color:#10182a;font-size:14px;font-weight:600;box-shadow:0 5px 16px #17223b08}
+.guide-button.secondary svg{width:20px;height:20px}
+.guide-button.secondary:hover{background:#f8f9fc;box-shadow:0 5px 18px #17223b12}
+html[data-theme="engineering"] .guide-button.secondary{border-radius:999px;color:#e6e9f1;background:linear-gradient(155deg,#2b2e35,#1b1e24);box-shadow:inset 0 0 0 1px #626a7a,0 5px 16px #0002}

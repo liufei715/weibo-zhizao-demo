@@ -1,0 +1,28 @@
+/* Shared quotation rows and summary use the existing PC card tokens. */
+.quotation-panel{--quote-gap:22px;--quote-control:20px;--quote-accent:var(--wb-action)}
+.quotation-unit{font-size:11px;color:var(--wb-text-muted)}
+.quotation-layout{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:var(--quote-gap);align-items:end}
+.quotation-options{min-width:0;margin:0;padding:0;border:0;display:grid;gap:4px}
+.quotation-row{display:grid;grid-template-columns:minmax(0,1fr) 75px var(--quote-control);align-items:center;gap:16px;min-height:48px;cursor:pointer;color:var(--wb-text-secondary);font-size:13px}
+.quotation-row>span:first-child{line-height:1.6;overflow-wrap:anywhere}
+.quotation-row>small{font-size:12px;color:var(--wb-text-muted);text-align:right;font-variant-numeric:tabular-nums}
+.quotation-row.is-selected{color:var(--wb-text)}
+.quotation-row input{display:block;margin:0;width:var(--quote-control);height:var(--quote-control);accent-color:var(--quote-accent);cursor:pointer}
+.quotation-row input:focus-visible{outline:2px solid var(--wb-focus);outline-offset:4px}
+.quotation-row:has(input:hover){color:var(--quote-accent)}
+.quotation-row input:active{transform:scale(.94)}
+.quotation-select-all{padding-top:12px;border-top:1px solid var(--wb-border-subtle);margin-top:6px}
+.quotation-select-all input{grid-column:3}
+.quotation-total{display:flex;flex-direction:column;align-items:flex-end;gap:9px;padding-bottom:6px}
+.quotation-total>span{font-size:12px;color:var(--wb-text-secondary)}
+.quotation-total>strong{font-size:27px;font-weight:650;letter-spacing:-.025em;color:var(--wb-text);font-variant-numeric:tabular-nums}
+.quotation-total>small,.quotation-note{font-size:11px;color:var(--wb-text-muted);line-height:1.8}
+.quotation-note{margin:20px 0 0;padding-top:16px;border-top:1px solid var(--wb-border-subtle)}
+.quotation-check{display:grid;place-items:center;width:20px;height:20px;color:var(--wb-action)}
+.quote-summary-lines{display:grid;gap:12px;margin:18px 0}
+.quote-summary-lines>div,.quotation-receipt>div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:12px;line-height:1.7}
+.quote-summary-lines span,.quotation-receipt dt{color:var(--wb-text-secondary)}
+.quote-summary-lines b,.quotation-receipt dd{font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+.quotation-receipt{display:grid;gap:12px;margin:16px 0}.quotation-receipt dd{margin:0}
+.quotation-options:focus{outline:2px solid var(--wb-focus);outline-offset:5px;border-radius:var(--ref-radius-thumbnail)}
+@media(max-width:1250px){.quotation-layout{grid-template-columns:minmax(0,1fr) 120px;gap:16px}.quotation-row{gap:10px;font-size:12px;grid-template-columns:minmax(0,1fr) 65px var(--quote-control)}}

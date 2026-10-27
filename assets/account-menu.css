@@ -1,0 +1,25 @@
+/* Account actions remain anchored to their avatar trigger. */
+.topbar{position:relative;z-index:10}
+.account-control{position:relative;flex-shrink:0}
+.account-dropdown{
+ position:absolute;top:calc(100% + 12px);right:0;z-index:40;
+ width:248px;max-width:calc(100vw - 32px);padding:10px;
+ border:1px solid var(--product-card-border);border-radius:var(--ref-radius-card-compact);
+ background:#fff;color:var(--wb-text);box-shadow:0 12px 36px #10182820;
+}
+.account-dropdown[hidden]{display:none}
+.account-menu-profile{display:flex;align-items:center;gap:12px;padding:12px 10px 18px;margin-bottom:6px;border-bottom:1px solid var(--wb-border-subtle)}
+.account-menu-profile strong{font-size:14px;font-weight:600}
+html[data-theme] .account-menu-avatar{--avatar-size:36px}
+.account-menu-actions{display:grid;gap:4px}
+.account-menu-actions button{
+ display:flex;align-items:center;gap:10px;width:100%;min-height:42px;padding:10px 12px;
+ border:0;border-radius:var(--ref-radius-thumbnail);background:transparent;color:var(--wb-text-secondary);
+ font-size:13px;text-align:left;
+}
+.account-menu-actions button>span{flex:1}
+.account-menu-actions button:hover{background:var(--wb-surface-subtle);color:var(--wb-text)}
+.account-menu-actions button:focus-visible{outline:2px solid var(--field-focus);outline-offset:-2px;background:var(--wb-surface-subtle)}
+.account-menu-actions button:active{background:var(--field-fill-hover)}
+html[data-theme="engineering"] .account-dropdown{background:#202329;box-shadow:0 12px 36px #0006}
+html[data-theme="engineering"] .account-menu-actions button:is(:hover,:focus-visible){background:#2c3039}

@@ -1,0 +1,36 @@
+/* Design images stay inside the existing assistant conversation. */
+.planter-stage-copy>strong{display:block;margin:4px 0 8px;font-size:13px;font-weight:600;color:var(--wb-text)}
+.planter-chat-image-wrap{margin-top:12px;min-width:0}
+.planter-chat-image{position:relative;display:block;width:100%;padding:0;overflow:hidden;border-radius:var(--ref-radius-thumbnail);background:#fff;box-shadow:0 2px 8px #1420390a;border:1px solid var(--wb-border-subtle);cursor:zoom-in}
+.planter-chat-image img{display:block;width:100%;height:220px;max-height:310px;object-fit:contain;background:white}
+.planter-chat-image>span{position:absolute;right:8px;bottom:8px;display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;color:#364255;background:#fffffff2;font-size:10px;opacity:0;transition:opacity .15s}
+.planter-chat-image:hover>span,.planter-chat-image:focus-visible>span{opacity:1}
+.planter-chat-image:focus-visible{outline:2px solid var(--wb-focus);outline-offset:3px}
+.planter-chat-image:active{filter:brightness(.96)}
+.planter-chat-image[hidden],.planter-image-error[hidden]{display:none}
+.planter-image-error{padding:18px;text-align:center;background:var(--wb-surface-subtle);border-radius:var(--ref-radius-thumbnail)}
+.planter-chat-progress{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px 0 18px;color:var(--wb-text-secondary);font-size:11px}
+.planter-chat-progress button{font-size:11px}
+html[data-theme] dialog.planter-image-dialog{width:min(1350px,94vw);max-width:94vw}
+.planter-image-modal{padding:22px}.planter-image-modal h2{font-size:18px;font-weight:550}.planter-image-scroll{overflow:auto;max-height:74dvh;background:white;border-radius:var(--ref-radius-thumbnail);text-align:center}.planter-image-scroll img{display:block;max-width:none;width:max(100%,1100px);height:auto;margin:auto}
+@media(prefers-reduced-motion:reduce){.planter-chat-image>span{transition:none}}
+
+.planter-gallery-tabs{display:flex;gap:6px;margin:18px 0;padding:4px;background:var(--wb-surface-subtle);border-radius:var(--ref-radius-thumbnail)}
+.planter-gallery-tabs button{flex:1;min-height:40px;padding:8px 12px;border-radius:var(--ref-radius-thumbnail);color:var(--wb-text-secondary);font-size:12px;white-space:nowrap}
+.planter-gallery-tabs button[aria-selected="true"]{color:var(--wb-text);background:var(--wb-surface);box-shadow:0 2px 8px #1420390c;font-weight:600}
+.planter-gallery-tabs button:disabled{opacity:.45;cursor:not-allowed}
+.planter-gallery-tabs button:enabled:hover{color:var(--wb-text)}
+.planter-gallery-tabs button:focus-visible{outline:2px solid var(--wb-focus);outline-offset:2px}
+.planter-gallery-image{display:flex;justify-content:center;align-items:center;height:60dvh;padding:16px;background:#fff;border-radius:var(--ref-radius-thumbnail);overflow:auto}
+.planter-gallery-image img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.planter-gallery-footer{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:16px;font-size:12px;color:var(--wb-text-secondary)}
+
+.product-image-page-count{display:block;margin-top:7px;font-size:11px;line-height:1.7;color:var(--wb-text-secondary)}
+.product-gallery-actions{display:flex;align-items:center;gap:12px}
+.product-gallery-actions [data-product-page]{flex-shrink:0}
+.product-gallery-actions [data-product-page]:disabled{opacity:.4;cursor:not-allowed}
+.product-gallery-actions [data-product-page]:focus-visible{outline:2px solid var(--wb-focus);outline-offset:3px}
+
+.product-gallery-error{padding:32px;text-align:center;color:var(--wb-text)}
+.product-gallery-error p{margin-bottom:16px}
+.product-gallery-error[hidden],.planter-gallery-image img[hidden],.planter-image-scroll img[hidden]{display:none}

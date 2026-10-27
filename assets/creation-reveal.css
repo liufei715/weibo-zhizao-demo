@@ -1,0 +1,45 @@
+/* Shared coordinates keep the photo and outline aligned at every PC size. */
+.creation-scene {
+ --robot-art-size:clamp(660px,50vw,1100px);
+ --robot-edge-offset:clamp(64px,6vw,132px);
+ --robot-line-opacity:.3;
+ --robot-line-filter:none;
+ --robot-line-blend:multiply;
+}
+html[data-theme="engineering"] .creation-scene {
+ --robot-line-opacity:.32;
+ --robot-line-filter:invert(1);
+ --robot-line-blend:screen;
+}
+.robot-reveal {
+ --robot-reveal-size:140px;
+ --robot-reveal-x:-1000px;
+ --robot-reveal-y:-1000px;
+ --robot-reveal-radius:0px;
+ position:absolute;z-index:0;top:45%;right:calc(-1 * var(--robot-edge-offset));
+ width:var(--robot-art-size);aspect-ratio:1240 / 1269;
+ transform:translateY(-50%);pointer-events:none;user-select:none;
+ -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 55%,#000b 73%,#0003 90%,transparent 100%);
+ mask-image:linear-gradient(180deg,#000 0%,#000 55%,#000b 73%,#0003 90%,transparent 100%);
+}
+.robot-photo-layer,.robot-outline-layer {position:absolute;inset:0;overflow:hidden;transform:scaleX(-1)}
+.robot-reveal img {display:block;width:100%;height:100%;object-fit:contain;max-width:none}
+.robot-photo-layer {
+ -webkit-mask-image:radial-gradient(circle var(--robot-reveal-radius) at var(--robot-reveal-x) var(--robot-reveal-y),#000 0%,#000 48%,transparent 100%);
+ mask-image:radial-gradient(circle var(--robot-reveal-radius) at var(--robot-reveal-x) var(--robot-reveal-y),#000 0%,#000 48%,transparent 100%);
+}
+.robot-outline-layer {
+ opacity:var(--robot-line-opacity);mix-blend-mode:var(--robot-line-blend);
+ -webkit-mask-image:radial-gradient(circle var(--robot-reveal-radius) at var(--robot-reveal-x) var(--robot-reveal-y),transparent 0%,transparent 48%,#000 100%);
+ mask-image:radial-gradient(circle var(--robot-reveal-radius) at var(--robot-reveal-x) var(--robot-reveal-y),transparent 0%,transparent 48%,#000 100%);
+}
+.robot-outline-layer img {
+ /* Calibrated against the supplied photo silhouette; original assets stay intact. */
+ transform-origin:0 0;transform:translateY(2.0505%) scale(.979,.978);
+ filter:var(--robot-line-filter);
+}
+.robot-reveal--photo-error .robot-photo-layer,.robot-reveal--outline-error .robot-outline-layer {display:none}
+.robot-reveal--photo-error .robot-outline-layer {-webkit-mask-image:none;mask-image:none}
+.robot-reveal--outline-error .robot-photo-layer {-webkit-mask-image:none;mask-image:none;opacity:.22}
+@media(min-width:1600px){.robot-reveal{--robot-reveal-size:160px}}
+@media(max-width:1250px){.robot-reveal{--robot-reveal-size:115px}}

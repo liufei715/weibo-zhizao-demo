@@ -1,0 +1,112 @@
+/* Shared default avatars and task-focused creation controls. */
+:root{
+ --avatar-size:40px;
+ --avatar-surface:#fff;
+ --avatar-shadow:0 0 0 2px rgb(255 255 255 / 92%),0 4px 12px rgb(16 24 40 / 18%);
+ --avatar-shadow-hover:0 0 0 2px #fff,0 6px 16px rgb(16 24 40 / 24%);
+ --creation-progress-surface:rgb(255 255 255 / 86%);
+ --creation-progress-line:#e3e6ed;
+ --creation-progress-muted:#e9ecf2;
+ --creation-progress-ink:#626b7b;
+ --template-selected-fill:#e8edff;
+ --template-selected-ink:#2348c5;
+ --template-selected-shadow:inset 0 0 0 1px #2348c514,0 3px 10px #2348c50a;
+}
+html[data-theme="engineering"]{
+ --avatar-surface:#252a33;
+ --avatar-shadow:0 0 0 2px rgb(255 255 255 / 14%),0 4px 14px rgb(0 0 0 / 42%);
+ --avatar-shadow-hover:0 0 0 2px rgb(255 255 255 / 24%),0 6px 18px rgb(0 0 0 / 50%);
+ --creation-progress-surface:rgb(24 27 33 / 94%);
+ --creation-progress-line:#3d424d;
+ --creation-progress-muted:#2c3039;
+ --creation-progress-ink:#b6bfce;
+ --template-selected-fill:#27344f;
+ --template-selected-ink:#cad8ff;
+ --template-selected-shadow:inset 0 0 0 1px #809ddc38,0 3px 12px #0002;
+}
+html[data-theme] .user-avatar{
+ display:block;width:var(--avatar-size);height:var(--avatar-size);min-width:var(--avatar-size);
+ object-fit:cover;object-position:center 38%;border-radius:50%;padding:0;flex-shrink:0;
+ background:var(--avatar-surface);border:0;box-shadow:var(--avatar-shadow);transition:box-shadow 180ms ease;
+}
+html[data-theme] .account-button{
+ display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;background:transparent;box-shadow:none;
+}
+html[data-theme] .account-button:hover .user-avatar{box-shadow:var(--avatar-shadow-hover)}
+html[data-theme] .account-button:focus-visible{outline:2px solid var(--field-focus);outline-offset:5px}
+html[data-theme] .user-avatar.avatar{--avatar-size:22px}
+html[data-theme] .user-avatar.message-avatar{--avatar-size:28px}
+html[data-theme] .user-avatar.workspace-avatar,html[data-theme] .user-avatar.profile-avatar{--avatar-size:48px}
+.workspace-identity,.account-profile{display:flex;align-items:center;gap:14px}
+.account-profile{margin:8px 0 24px}
+.creation-scene .creation-steps{
+ display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;list-style:none;
+ width:100%;max-width:none;margin:24px 0 0;padding:14px 18px;
+ background:var(--creation-progress-surface);border:1px solid var(--creation-progress-line);
+ border-radius:12px;box-shadow:0 6px 20px #10182804;backdrop-filter:blur(10px);
+ font-family:var(--wb-font-sans);
+}
+.creation-scene .creation-steps>li{position:relative;display:flex;align-items:center;gap:10px;min-width:0}
+.creation-scene .creation-steps>li:not(:last-child)::after{
+ content:"";position:absolute;inset-inline-end:0;width:clamp(10px,2vw,26px);height:1px;
+ background:var(--creation-progress-line);
+}
+.creation-scene .creation-steps .step-marker{
+ display:grid;place-items:center;width:26px;height:26px;flex:0 0 26px;border-radius:50%;
+ background:var(--creation-progress-muted);color:var(--creation-progress-ink);font-size:11px;font-weight:600;
+}
+.creation-scene .creation-steps .step-label{font-size:12px;color:var(--creation-progress-ink);white-space:nowrap}
+.creation-scene .creation-steps .active .step-marker{background:var(--template-selected-ink);color:var(--template-selected-fill)}
+.creation-scene .creation-steps .active .step-label{color:var(--wb-text);font-weight:600}
+html[data-theme] .creation-scene .prompt-list{gap:10px}
+html[data-theme] .creation-scene .prompt-list .chip{
+ display:inline-flex;align-items:center;justify-content:center;gap:9px;height:36px;
+ padding:0 14px;font-size:11px;border:0;border-radius:999px;
+ background:var(--wb-surface);color:var(--wb-text-secondary);box-shadow:none;
+}
+html[data-theme] .creation-scene .prompt-list .chip:hover{background:var(--field-fill-hover)}
+html[data-theme] .creation-scene .prompt-list .chip.selected{
+ background:var(--template-selected-fill);color:var(--template-selected-ink);box-shadow:var(--template-selected-shadow);
+}
+html[data-theme] .creation-scene .prompt-list .chip svg{width:18px;height:18px;padding:2px}
+html[data-theme] .creation-scene .prompt-list .chip.selected svg{
+ padding:3px;border-radius:50%;background:var(--template-selected-ink);color:var(--template-selected-fill);
+}
+html[data-theme] .creation-scene .prompt-list .chip:focus-visible{outline:2px solid var(--field-focus);outline-offset:3px}
+html[data-theme] .creation-scene .prompt-list .chip:active{transform:translateY(1px)}
+@media(max-width:1250px){
+ .creation-scene .creation-steps{gap:12px;padding-inline:14px}
+ .creation-scene .creation-steps .step-label{font-size:11px}
+}
+
+
+@media(prefers-reduced-motion:reduce){html[data-theme] .user-avatar{transition:none}}
+
+/* Conversation alignment: user on the right, assistant on the left. */
+.chat-body{
+ --chat-avatar-gap:10px;
+ --chat-user-inset:32px;
+ --chat-bubble-radius:12px;
+}
+.chat-message{gap:var(--chat-avatar-gap)}
+.chat-message>.message-avatar{flex-shrink:0}
+.chat-message.user-message{
+ flex-direction:row-reverse;
+ margin-inline-start:var(--chat-user-inset);
+}
+.user-message>div{
+ flex:0 1 auto;
+ border-radius:var(--chat-bubble-radius) 0 var(--chat-bubble-radius) var(--chat-bubble-radius);
+ text-align:start;
+ white-space:pre-wrap;
+}
+.assistant-message{flex-direction:row}
+
+/* Editor exit: explain autosave and keep the return choice close to the task. */
+.editor-exit-dialog{width:min(460px,calc(100vw - 32px))}
+.editor-exit-modal{padding:32px}
+.editor-exit-modal h2{margin-bottom:12px}
+.editor-exit-modal>p{margin-bottom:22px}
+.editor-exit-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.editor-exit-actions button{min-height:40px}
+.editor-exit-cancel{display:block;margin:18px auto 0}

@@ -1,0 +1,73 @@
+/* Offset the writing surface from the figure, keeping the reference silhouette readable. */
+.creation-body #main{max-width:none;width:100%;padding:0;overflow:hidden;isolation:isolate}
+.creation-scene{--creation-figure-scale:1.35;--creation-figure-offset-y:-36px;--figure-line-width:1.15px;--figure-orbit-width:.9px;position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr);align-items:center;max-width:none;min-height:max(700px,calc(100dvh - 126px));margin:0 auto;padding:36px clamp(32px,3vw,64px) 48px}
+.creation-content{position:relative;grid-column:1;z-index:2;width:100%;max-width:900px;justify-self:center}
+.creation-scene .creation-backdrop,
+.creation-scene .creation-foreground{position:absolute;left:auto;right:-11%;top:0;bottom:0;width:75%;pointer-events:none;transform:translateY(var(--creation-figure-offset-y)) scaleX(-1)}
+.creation-scene .creation-backdrop{z-index:0;opacity:.65}
+.creation-scene .creation-foreground{z-index:3;opacity:.6;mask-image:linear-gradient(90deg,#000 40%,#0008 64%,transparent 82%)}
+.creation-scene .geek-figure{width:100%;height:100%;overflow:visible;transform:scale(var(--creation-figure-scale));transform-origin:48% 30%}
+.creation-scene .create-intro{--create-title-size:36px;--create-copy-size:14px;text-align:left;margin:0 0 24px;padding:0;max-width:600px}
+.creation-scene .create-intro h1{font-size:var(--create-title-size);white-space:nowrap;line-height:1.22;letter-spacing:-.025em;margin:0 0 16px;font-weight:600}
+.creation-scene .create-intro p{font-size:var(--create-copy-size);max-width:none;line-height:1.7;margin:0;white-space:nowrap}
+.creation-scene .idea-form{max-width:none;width:100%;padding:22px;box-shadow:0 16px 40px #2026330b;position:relative;border-radius:20px}
+.creation-scene .idea-form textarea{height:128px;min-height:112px;max-height:360px;resize:vertical;font-size:15px;line-height:1.85}
+.creation-scene .composer-bottom{gap:10px;margin-top:18px}
+.creation-scene .composer-bottom button{padding-inline:17px}
+.creation-scene .prompt-list{justify-content:flex-start;gap:7px;margin:18px 0 0}
+.creation-scene .prompt-list>span{width:100%;margin-bottom:2px}
+.creation-scene .prompt-list .chip{font-size:10px;padding:7px 10px;gap:5px}
+.creation-scene .creation-steps{margin:27px 0 0;justify-content:space-between;gap:10px;font-size:11px;font-family:var(--wb-font-sans)}
+.creation-scene .creation-steps>span{gap:7px;white-space:nowrap}
+.creation-scene .creation-steps svg{width:15px;height:15px}
+.creation-scene .prototype-note{margin:24px 0 0;justify-content:flex-start;font-size:11px!important;line-height:1.8}
+.creation-body .site-footer{margin-top:4px}
+html[data-theme="light"] .creation-scene .creation-backdrop{opacity:.68}
+html[data-theme="engineering"] .creation-scene .creation-backdrop{opacity:.5}
+html[data-theme="engineering"] .creation-scene .creation-foreground{opacity:.45}
+html[data-theme="engineering"] .creation-scene .create-intro h1{font-weight:500;color:#f0f1f5}
+html[data-theme="engineering"] .creation-scene .create-intro h1 span{color:#d8dce8}
+html[data-theme="engineering"] .creation-scene .idea-form{box-shadow:inset 0 1px 0 #ffffff0d,0 24px 65px #0005}
+html[data-theme="engineering"] .creation-scene .creation-steps .active{color:#d7dce9}
+html[data-theme="engineering"] .creation-scene .creation-steps{color:#a1a8b7}
+@media(min-width:1600px){
+ .creation-scene{min-height:max(760px,calc(100dvh - 126px))}
+ .creation-scene .create-intro{--create-title-size:38px}
+ .creation-scene .creation-backdrop,.creation-scene .creation-foreground{right:-12%;width:76%}
+}
+@media(max-width:1250px){
+ .creation-scene{min-height:max(680px,calc(100dvh - 126px));padding-top:30px}
+ .creation-scene .creation-backdrop,.creation-scene .creation-foreground{right:-20%;width:82%}
+ .creation-scene .create-intro{--create-title-size:32px;--create-copy-size:13px}
+ .creation-scene .idea-form{padding:18px}
+ .creation-scene .prompt-list .chip{font-size:9px;padding-inline:8px}
+ .creation-scene .composer-bottom button{padding-inline:13px;font-size:11px}
+ .creation-scene .creation-steps{font-size:10px;gap:8px}
+}
+
+/* A separate floor spans the entire creation background at every PC viewport. */
+.creation-body #main>.creation-floor{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.creation-floor-art{display:block;width:100%;height:100%;stroke:#8190ac;stroke-width:.7;opacity:.2}
+html[data-theme="engineering"] .creation-floor-art{stroke:#777f93;opacity:.18}
+.creation-scene .creation-backdrop,.creation-scene .creation-foreground{right:-23%;width:78%}
+@media(max-width:1250px){.creation-body #main>.creation-floor{inset-inline:0}.creation-scene .creation-backdrop,.creation-scene .creation-foreground{right:-30%;width:82%}}
+
+/* Light frosted shell; the writing surface retains its opaque gray fill. */
+html[data-theme="light"] .creation-scene .idea-form{
+ background:#fff;
+ box-shadow:inset 0 0 0 1px #ffffffc7,0 16px 40px #2026330b;
+}
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+ html[data-theme="light"] .creation-scene .idea-form{
+  background:rgb(255 255 255 / 62%);
+  -webkit-backdrop-filter:blur(16px) saturate(1.08);
+  backdrop-filter:blur(16px) saturate(1.08);
+ }
+}
+
+/* Fine continuous vector contours stay crisp as the illustration scales. */
+.creation-scene .geek-figure{shape-rendering:geometricPrecision}
+.creation-scene :is(.figure-person,.figure-ribbons,.figure-orbits){stroke-linecap:round;stroke-linejoin:round}
+.creation-scene .figure-person path{stroke-width:var(--figure-line-width);vector-effect:non-scaling-stroke}
+.creation-scene :is(.figure-ribbons,.figure-orbits) path{stroke-width:var(--figure-orbit-width);vector-effect:non-scaling-stroke}
+.creation-scene .figure-nodes .figure-square-outline{stroke-width:var(--figure-orbit-width);vector-effect:non-scaling-stroke}

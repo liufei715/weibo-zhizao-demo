@@ -1,0 +1,16 @@
+/* Project identity and task state come before the resume action. */
+:root{--project-meta-size:12px;--project-card-title-size:16px}
+.project-card{display:flex;flex-direction:column;min-height:270px;padding:22px}
+.project-card-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.project-card .draft-icon{width:38px;height:38px;border-radius:9px;background:var(--wb-surface-subtle);color:var(--wb-text-secondary)}
+.project-card .status-pill{position:static;font-size:11px;background:var(--wb-surface-subtle);color:var(--wb-text-secondary)}
+.project-card h3{font-size:var(--project-card-title-size);line-height:1.6;margin:18px 0 7px}
+.project-title-link{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;text-align:left;padding:0;max-width:100%;font:inherit;font-weight:600;overflow-wrap:anywhere}
+.project-title-link:hover:not(:disabled){text-decoration:underline;text-underline-offset:4px}
+.project-card .project-description{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-height:40px;margin:0;font-size:var(--project-meta-size);line-height:1.7;overflow-wrap:anywhere;color:var(--wb-text-secondary)}
+.project-composition{display:flex;gap:16px;flex-wrap:wrap;font-size:var(--project-meta-size);color:var(--wb-text-secondary);margin-top:15px}
+.project-composition>span{display:inline-flex;align-items:center;gap:6px}
+.project-card .draft-meta{margin-top:auto;padding-top:16px;font-size:11px}
+.project-card .draft-meta .text-button{min-height:36px}
+html[data-theme="engineering"] .project-card .draft-icon,
+html[data-theme="engineering"] .project-card .status-pill{background:#ffffff06;color:#bbc2d0}
