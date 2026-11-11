@@ -1,11 +1,12 @@
-import {quoteServices,selectedQuoteServices,quoteAmount,quotationError,syncQuotationControls,updateQuoteServices} from './quotation.js?v=20261027-web-r4';
-import {templateFor} from './product-templates.js?v=20261027-web-r4';
-import {validateProductOrder} from './template-order.js?v=20261027-web-r4';
-import {icon,esc} from './icons.js?v=20261027-web-r4';
-import {state,currentFlow,persist,removeOrder} from './store.js?v=20261027-web-r4';
-import {modulesFor,allWires,money,total,selectedModules,regionHints} from './workflow-data.js?v=20261027-web-r4';
-import {bomView,purchaseList,addressForm,orderDetail} from './order-view.js?v=20261027-web-r4';
-import {showModal,closeModal,toast,download} from './ui.js?v=20261027-web-r4';
+import {requireAuth} from './dialogs.js?v=20261029-structure-r2';
+import {quoteServices,selectedQuoteServices,quoteAmount,quotationError,syncQuotationControls,updateQuoteServices} from './quotation.js?v=20261029-structure-r2';
+import {templateFor} from './product-templates.js?v=20261029-structure-r2';
+import {validateProductOrder} from './template-order.js?v=20261029-structure-r2';
+import {icon,esc} from './icons.js?v=20261029-structure-r2';
+import {state,currentFlow,persist,removeOrder} from './store.js?v=20261029-structure-r2';
+import {modulesFor,money,total,selectedModules,regionHints,readyForQuotation} from './workflow-data.js?v=20261029-structure-r2';
+import {bomView,purchaseList,addressForm,orderDetail} from './order-view.js?v=20261029-structure-r2';
+import {showModal,closeModal,toast,download} from './ui.js?v=20261029-structure-r2';
 let hooks={},orderSubmitting=false;
 export function initOrders(api){hooks=api;}
 function openBom(){const f=currentFlow();showModal(bomView(f),'bom-dialog',()=>{if(state.page==='checkout'||state.page==='confirm')hooks.render();});updateBom();}
@@ -20,6 +21,7 @@ export function validateAddress(form){
 }
 function submitOrder(){
  const f=currentFlow();if(!f||orderSubmitting)return;
+ if(!state.auth){requireAuth(()=>{if(currentFlow()?.id===f.id)submitOrder();});return;}
  if(f.lastOrderToken===f.checkoutToken&&state.orders.some(o=>o.id===f.lastOrderId)){hooks.navigate('success',f.lastOrderId);return;}
  const quoteInvalid=quotationError(f);if(quoteInvalid){hooks.navigate('checkout');toast(quoteInvalid);return;}
  const address=state.addresses.find(a=>a.id===state.addressId),amount=quoteAmount(f);if(!selectedModules(f).length){hooks.navigate('checkout');toast('请先选择采购物料');return;}const invalid=validateProductOrder(f);if(invalid){hooks.navigate('checkout');toast(invalid.message);document.getElementById(invalid.field)?.focus();return;}
@@ -41,7 +43,7 @@ document.addEventListener('click',e=>{
  if(action==='order-detail'){const order=state.orders.find(o=>o.id===value);if(order)showModal(orderDetail(order,state),'order-detail-dialog');return;}
  if(action==='order-delete'){
   const order=state.orders.find(o=>o.id===value);if(!order)return;
-  showModal(`<div class="simple-modal"><h2 id="dialog-title">删除订单？</h2><p translate="no">${esc(order.projectName)}</p><p>删除后将移除此订单记录，关联的设计方案会保留。</p><div class="address-form-actions"><button class="secondary" data-close>取消</button><button class="secondary order-delete" data-wf="order-delete-confirm" data-value="${esc(value)}">确认删除</button></div></div>`,'order-delete-dialog');return;
+  showModal(`<div class="simple-modal"><button class="dialog-close icon-button" data-close aria-label="取消删除">${icon('close',18)}</button><h2 id="dialog-title">删除订单？</h2><p translate="no">${esc(order.projectName)}</p><p>删除后将移除此订单记录，关联的设计方案会保留。</p><div class="address-form-actions"><button class="secondary" data-close autofocus>取消</button><button class="secondary order-delete" data-wf="order-delete-confirm" data-value="${esc(value)}">确认删除</button></div></div>`,'order-delete-dialog');return;
  }
  if(action==='order-delete-confirm'){
   if(!state.orders.some(o=>o.id===value)){closeModal();hooks.render();return;}
@@ -56,11 +58,11 @@ document.addEventListener('click',e=>{
  case 'quantity-plus':quantity(value,(f.procurement[value]||1)+1);break;
  case 'purchase-list':document.getElementById('purchase-pane').innerHTML=purchaseList(f);break;
  case 'export-bom':{const csv='\uFEFF物料,数量,参考单价,参考合计\r\n'+selectedModules(f).map(m=>`"${m.full}",${f.procurement[m.id]},${m.price===null?'待报价':m.price},${m.price===null?'待报价':m.price*f.procurement[m.id]}`).join('\r\n');download('蔚博智造-采购清单.csv',csv,'text/csv;charset=utf-8');toast('已导出采购清单');break;}
- case 'checkout':if(templateFor(f)&&!allWires(f)){toast('请先完成方案模块连线，再填写下单详情');break;}if(!selectedModules(f).length){toast('请选择至少一种物料');break;}f.checkoutToken='checkout-'+Date.now().toString(36);persist();closeModal();hooks.navigate('checkout');break;
+ case 'checkout':if(templateFor(f)&&!readyForQuotation(f)){toast('请先完成方案资料整理，再继续报价。');break;}if(!selectedModules(f).length){toast('请选择至少一种物料');break;}f.checkoutToken='checkout-'+Date.now().toString(36);persist();closeModal();requireAuth(()=>hooks.navigate('checkout'));break;
  case 'new-address':openAddress();break;
  case 'edit-address':openAddress(value);break;
  case 'select-address':state.addressId=value;persist();hooks.render();break;
- case 'confirm-order':{if(quotationError(f)){syncQuotationControls(f);document.getElementById('quote-options')?.focus();break;}const error=document.getElementById('checkout-error');const invalid=validateProductOrder(f);if(invalid){error.hidden=false;error.textContent=invalid.message;const field=document.getElementById(invalid.field);if(field){field.setAttribute('aria-invalid','true');field.focus();}else{error.tabIndex=-1;error.focus();}break;}if(!selectedModules(f).length){error.hidden=false;error.textContent='至少选择一种采购物料。';break;}persist();hooks.navigate('confirm');break;}
+ case 'confirm-order':{if(!state.auth){requireAuth(()=>hooks.navigate('checkout'));break;}if(quotationError(f)){syncQuotationControls(f);document.getElementById('quote-options')?.focus();break;}const error=document.getElementById('checkout-error');const invalid=validateProductOrder(f);if(invalid){error.hidden=false;error.textContent=invalid.message;const field=document.getElementById(invalid.field);if(field){field.setAttribute('aria-invalid','true');field.focus();}else{error.tabIndex=-1;error.focus();}break;}if(!selectedModules(f).length){error.hidden=false;error.textContent='至少选择一种采购物料。';break;}persist();hooks.navigate('confirm');break;}
  case 'submit-order':submitOrder();break;
  }
 });

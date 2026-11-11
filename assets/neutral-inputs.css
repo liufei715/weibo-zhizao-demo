@@ -6,7 +6,7 @@ html[data-theme] :is(.idea-form,.chat-composer,.comment-input,.field,.project-ti
 html[data-theme] :is(.idea-form,.chat-composer,.comment-input,.field,.project-title,.quantity-control) :is(input:not([type="radio"]):not([type="checkbox"]),textarea,select):focus,html[data-theme] #code-editor:focus,html[data-theme] .share-input:focus{background:var(--field-fill);outline:none;box-shadow:inset 0 0 0 1px var(--field-focus)}
 html[data-theme] :is(input,textarea)::placeholder{color:var(--field-placeholder);opacity:1}
 html[data-theme] .chat-composer{background:var(--field-fill);border:0;box-shadow:none}
-html[data-theme] .chat-composer textarea{padding:12px;min-height:100px;resize:vertical}
+html[data-theme] .chat-composer textarea{padding:10px 12px;height:72px;min-height:72px;max-height:120px;resize:vertical}
 html[data-theme] .field :is(input,textarea,select):disabled{background:var(--field-disabled);color:var(--field-placeholder);opacity:.7;box-shadow:none}
 html[data-theme] .field [aria-invalid="true"],html[data-theme] .field [aria-invalid="true"]:focus{outline:none;box-shadow:inset 0 0 0 1px var(--wb-danger)}
 html[data-theme] .creation-scene .prompt-list .chip.selected{background:var(--field-fill);color:var(--field-ink);box-shadow:inset 0 0 0 1px var(--field-focus)}

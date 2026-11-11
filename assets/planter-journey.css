@@ -58,3 +58,29 @@ html[data-theme] dialog.planter-image-dialog{width:min(1350px,94vw);max-width:94
 .product-canvas-loading h2{margin-top:18px;font-size:18px;color:var(--wb-text)}
 .product-canvas-loading p{margin-top:10px;font-size:13px}
 @media(max-width:760px){.product-canvas .viewport-top{height:auto;flex-wrap:wrap;min-height:60px;padding:10px 14px}.product-canvas-tabs{padding:12px;gap:6px}.product-canvas-image{margin:12px 12px 0;min-height:280px}.product-canvas-caption{padding:14px}.product-canvas .viewport-status{flex-wrap:wrap;gap:8px;height:auto;min-height:40px;padding:10px 14px}}
+
+/* Review status follows existing surface/text/focus tokens in both themes. */
+.product-activity{margin:16px 0 18px;padding:14px 16px;border:1px solid var(--wb-border-subtle);border-radius:var(--ref-radius-thumbnail);background:var(--wb-surface-subtle);color:var(--wb-text-secondary);font-size:12px}
+.product-activity-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.product-activity-heading strong{color:var(--wb-text);font-weight:600}
+.product-activity ol{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.product-activity li{display:flex;align-items:flex-start;gap:8px;line-height:1.7}
+.product-activity li svg{flex-shrink:0;margin-top:4px}
+.product-activity li.is-current{color:var(--wb-text);font-weight:550}
+.product-activity>.text-button{min-height:44px;margin-top:4px;font-size:12px}
+.product-auto-continue{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:-10px 0 18px;padding:8px 0;color:var(--wb-text-secondary);font-size:12px;line-height:1.7}
+.product-auto-continue b{font-variant-numeric:tabular-nums;color:var(--wb-text);font-weight:600}
+.product-auto-continue button{min-height:44px;font-size:12px}
+.product-auto-continue button:hover,.product-activity>.text-button:hover{color:var(--wb-text)}
+.product-auto-continue button:focus-visible,.product-activity button:focus-visible{outline:2px solid var(--wb-focus);outline-offset:3px}
+.product-auto-continue button:active,.product-activity button:active{opacity:.75}
+
+/* Paired PCB and enclosure references share the final review stage. */
+.product-canvas-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;flex:1;min-height:220px;margin:20px 24px 0}
+.product-canvas-pair figure{display:flex;flex-direction:column;min-width:0;margin:0}
+.product-canvas-pair .product-canvas-image{margin:0;min-height:220px}
+.product-canvas-pair figcaption,.product-image-label{display:block;padding:8px 0 0;text-align:center;color:var(--wb-text-secondary);font-size:12px;line-height:1.6}
+.product-chat-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.product-chat-pair .planter-chat-image img{height:160px}
+.product-canvas-pair .product-canvas-image img{transform:none}
+@media(max-width:760px){.product-canvas-pair{grid-template-columns:1fr;margin:12px 12px 0}.product-canvas-pair .product-canvas-image{min-height:250px}.product-chat-pair{gap:8px}.product-chat-pair .planter-chat-image img{height:140px}}
