@@ -1,23 +1,26 @@
-import {initLanguage,languageControl,localizePage,translate,localizedPrompt} from './i18n.js?v=20261027-web-r4';
-import {syncProductJourney,productJourneyFor} from './product-journey.js?v=20261027-web-r4';
-import {syncQuotationControls} from './quotation.js?v=20261027-web-r4';
-import {initializeCreationRoutes,mountCreationRouteEvents,saveRouteDraft,currentCreationRoute} from './creation-routes.js?v=20261027-web-r4';
-import {initCreationReveal} from './creation-reveal.js?v=20261027-web-r4';
-import {accountControl,initAccountMenu,closeAccountMenu} from './account-menu.js?v=20261027-web-r4';
-import {templateById} from './product-templates.js?v=20261027-web-r4';
-import {templatePicker,templateDetails} from './template-ui.js?v=20261027-web-r4';
-import {themeControl,applyTheme} from './theme.js?v=20261027-web-r4';
-import {icon,esc} from './icons.js?v=20261027-web-r4';
-import {works,plugins} from './data.js?v=20261027-web-r4';
-import {home,resources,gate,createPage,myPage,card,empty} from './views.js?v=20261027-web-r4';
-import {state,persist,currentFlow,newFlow,removeProject} from './store.js?v=20261027-web-r4';
-import {editor} from './editor-view.js?v=20261027-web-r4';
-import {checkoutPage,successPage} from './order-view.js?v=20261027-web-r4';
-import {initDialogs,requireAuth,detail} from './dialogs.js?v=20261027-web-r4';
-import {initWorkflow,sendChat} from './workflow.js?v=20261027-web-r4';
-import {initOrders} from './order-controller.js?v=20261027-web-r4';
-import {initWiring,drawWires} from './wiring.js?v=20261027-web-r4';
-import {closeModal,toast,simpleModal,showModal} from './ui.js?v=20261027-web-r4';
+import {beginEditorSession,editorSessionIsNew,finishEditorSession,discardEditorSession} from './editor-session.js?v=20261029-structure-r2';
+import {mountConversationFeedback,prepareMessageReveal} from './conversation-feedback.js?v=20261029-structure-r2';
+import {mountConversationProgress} from './conversation-progress.js?v=20261029-structure-r2';
+import {initLanguage,languageControl,localizePage,translate,localizedPrompt} from './i18n.js?v=20261029-structure-r2';
+import {syncProductJourney,productJourneyFor,upgradeProductJourney} from './product-journey.js?v=20261029-structure-r2';
+import {syncQuotationControls} from './quotation.js?v=20261029-structure-r2';
+import {initializeCreationRoutes,mountCreationRouteEvents,saveRouteDraft,currentCreationRoute} from './creation-routes.js?v=20261029-structure-r2';
+import {initCreationReveal} from './creation-reveal.js?v=20261029-structure-r2';
+import {accountControl,initAccountMenu,closeAccountMenu} from './account-menu.js?v=20261029-structure-r2';
+import {templateById} from './product-templates.js?v=20261029-structure-r2';
+import {templatePicker,templateDetails} from './template-ui.js?v=20261029-structure-r2';
+import {themeControl,applyTheme} from './theme.js?v=20261029-structure-r2';
+import {icon,esc} from './icons.js?v=20261029-structure-r2';
+import {works,plugins} from './data.js?v=20261029-structure-r2';
+import {home,resources,gate,createPage,myPage,card,empty} from './views.js?v=20261029-structure-r2';
+import {state,persist,currentFlow,newFlow,removeProject} from './store.js?v=20261029-structure-r2';
+import {editor} from './editor-view.js?v=20261029-structure-r2';
+import {checkoutPage,successPage} from './order-view.js?v=20261029-structure-r2';
+import {initDialogs,requireAuth,detail} from './dialogs.js?v=20261029-structure-r2';
+import {initWorkflow,sendChat,cancelPendingChat} from './workflow.js?v=20261029-structure-r2';
+import {initOrders} from './order-controller.js?v=20261029-structure-r2';
+import {initWiring,drawWires} from './wiring.js?v=20261029-structure-r2';
+import {closeModal,toast,simpleModal,showModal} from './ui.js?v=20261029-structure-r2';
 
 initLanguage();
 initializeCreationRoutes(state);
@@ -25,44 +28,62 @@ const pages={discover:['热点趋势','发现灵感'],create:['AI 硬件创造',
 let orderId=new URLSearchParams(location.search).get('order')||'';
 let editorOrigin=new URLSearchParams(location.search).get('from')||'';
 const editorOriginPages=new Set(['discover','create','resources','my']);
+let disposeConversationProgress=()=>{};
 let mountedPage='',resourceQuery='';
 let disposeCreationReveal=()=>{};
 const flowParam=new URLSearchParams(location.search).get('flow');if(flowParam&&state.flows[flowParam])state.flowId=flowParam;
 Object.values(state.flows).forEach(f=>{delete f.busy;delete f.pendingPin;});
-if(!pages[state.page]&&state.page!=='editor')state.page='discover';
-function nav(){const selected=state.page==='editor'?'create':['checkout','confirm','success'].includes(state.page)?'my':state.page;return `<aside class="site-sidebar"><div class="sidebar-brand"><a href="?page=discover" data-nav="discover" aria-label="蔚博智造首页"><img class="brand-image" src="assets/weibo-logo-transparent.png" alt="蔚博智造 VIBE HARDWARE"></a><button class="icon-button collapse-button" data-collapse aria-label="${state.collapsed?'展开':'收起'}侧边栏">${icon('collapse',17)}</button></div><nav class="side-nav" aria-label="主导航">${[['discover','home','热点趋势'],['create','spark','AI 硬件创造'],['resources','grid','AI 资源广场'],['my','user','我的']].map(([id,i,t])=>`<button class="nav-item ${selected===id?'active':''}" data-page="${id}" ${selected===id?'aria-current="page"':''} aria-label="${t}" title="${t}">${icon(i,20)}<span class="nav-label">${t}</span>${id==='create'?'<small class="tiny-badge">免费设计</small>':selected===id?'<i class="nav-dot"></i>':''}</button>`).join('')}</nav><div class="sidebar-spacer"></div><footer class="sidebar-footer">蔚博智造 © 2026</footer></aside>`;}
+if(!pages[state.page]&&state.page!=='editor')state.page='create';
+function nav(){const selected=state.page==='editor'?'create':['checkout','confirm','success'].includes(state.page)?'my':state.page;return `<aside class="site-sidebar"><div class="sidebar-brand"><a href="?page=create" data-nav="create" aria-label="蔚博智造首页"><img class="brand-image" src="assets/weibo-logo-transparent.png" alt="蔚博智造 VIBE HARDWARE"></a><button class="icon-button collapse-button" data-collapse aria-label="${state.collapsed?'展开':'收起'}侧边栏">${icon('collapse',17)}</button></div><nav class="side-nav" aria-label="主导航">${[['create','spark','AI 硬件创造'],['discover','home','热点趋势'],['resources','grid','AI 资源广场'],['my','user','我的']].map(([id,i,t])=>`<button class="nav-item ${selected===id?'active':''}" data-page="${id}" ${selected===id?'aria-current="page"':''} aria-label="${t}" title="${t}">${icon(i,20)}<span class="nav-label">${t}</span>${id==='create'?'<small class="tiny-badge">免费设计</small>':selected===id?'<i class="nav-dot"></i>':''}</button>`).join('')}</nav><div class="sidebar-spacer"></div><footer class="sidebar-footer">蔚博智造 © 2026</footer></aside>`;}
 function breadcrumb(){
  const [title,sub]=pages[state.page]||pages.discover;
+ const nested=['checkout','confirm','success'].includes(state.page);
  const parent=state.page==='success'?'my':state.page==='confirm'?'checkout':state.page==='checkout'?'editor':state.page;
+ const target=nested&&parent!=='my'&&!currentFlow()?'create':parent;
  const label=state.page==='checkout'?'设计工作台':title;
- const params=new URLSearchParams({page:parent});
- if(parent==='my')params.set('tab',state.page==='success'?'orders':state.myTab);
- if(['editor','checkout'].includes(parent)&&state.flowId)params.set('flow',state.flowId);
- if(parent==='editor'&&editorOriginPages.has(editorOrigin))params.set('from',editorOrigin);
- return `<nav class="breadcrumb" aria-label="面包屑导航"><a class="breadcrumb-link" href="?${esc(params.toString())}" data-nav="${parent}"${parent==='my'?` data-workspace-tab="${params.get('tab')}"`:''}><strong>${label}</strong></a>${icon('chevron',12)}<span aria-current="page">${sub}</span></nav>`;
+ const params=new URLSearchParams({page:target});
+ if(target==='my')params.set('tab',state.page==='success'?'orders':state.myTab);
+ if(['editor','checkout'].includes(target)&&state.flowId)params.set('flow',state.flowId);
+ if(target==='editor'&&editorOriginPages.has(editorOrigin))params.set('from',editorOrigin);
+ const navAttrs=`href="?${esc(params.toString())}" data-nav="${target}"${target==='my'?` data-workspace-tab="${params.get('tab')}"`:''}`;
+ const trail=`<nav class="breadcrumb" aria-label="面包屑导航"><a class="breadcrumb-link" ${navAttrs}><strong>${target==='create'&&nested?'AI 硬件创造':label}</strong></a>${icon('chevron',12)}<span aria-current="page">${sub}</span></nav>`;
+ if(!nested)return trail;
+ const backLabel=target==='create'?'返回上一个页面':state.page==='checkout'?'返回设计工作台':state.page==='confirm'?'返回填写详情':'我的订单';
+ return `<div class="breadcrumb-bar"><a class="breadcrumb-back wb-back-control" ${navAttrs} aria-label="${backLabel}" title="${backLabel}">${icon('chevron',22)}</a><span class="breadcrumb-divider" aria-hidden="true"></span>${trail}</div>`;
 }
 function topbar(){const searchable=['discover','resources'].includes(state.page);return `<header class="topbar">${breadcrumb()}${searchable?`<label class="search-box">${icon('search',17)}<span class="sr-only">搜索作品、作者或资源</span><input id="global-search" type="search" maxlength="100" placeholder="${state.page==='resources'?'搜索资源、产品和教程':'搜索灵感、作品或创作者'}" value="${esc(state.query)}"><span class="search-key">⌘ K</span></label>`:'<div class="topbar-fill"></div>'}<div class="top-actions">${languageControl()}${themeControl(state.theme)}<button class="icon-button" data-info="notifications" aria-label="查看通知">${icon('bell',18)}</button>${state.auth?accountControl():'<button class="secondary login-top" data-login>登录</button>'}</div></header>`;}
 function body(){
  if(state.page==='discover')return home(state);
  if(state.page==='resources')return resources(state);
- if(state.page==='create')return state.auth?createPage(state):gate('create');
+ if(state.page==='create')return createPage(state);
  if(state.page==='my')return state.auth?myPage(state):gate('my');
  if(['checkout','confirm'].includes(state.page)){const f=currentFlow();return f?checkoutPage(f,state,state.page==='confirm'):empty('请先创建一个项目','完成器件选择后再进入备料下单。','开始创作','create');}
  if(state.page==='success'){const order=state.orders.find(o=>o.id===orderId);return order?successPage(order):empty('没有找到这个订单','前往我的订单查看已保存的记录。','我的项目','my');}
  return home(state);
 }
 export function render(){
+ // Direct links and browser history must use the same order login boundary.
+ if(['checkout','confirm','success'].includes(state.page)&&!state.auth){
+  const destination=state.page,id=orderId,flowId=state.flowId;
+  state.page=currentFlow()?'editor':'create';
+  const url=new URL(location.href);url.searchParams.set('page',state.page);url.searchParams.delete('order');history.replaceState({},'',url);
+  render();requireAuth(()=>{state.flowId=flowId;navigate(destination,id);});return;
+ }
  closeAccountMenu();
+ disposeConversationProgress();disposeConversationProgress=()=>{};
+ if(state.page!=='editor')prepareMessageReveal(null);
  disposeCreationReveal();disposeCreationReveal=()=>{};
  document.body.classList.toggle('site-collapsed',state.collapsed);document.body.classList.toggle('editor-body',state.page==='editor');document.body.classList.toggle('creation-body',state.page==='create');
  if(state.page==='editor'){
-  if(!state.auth){state.page='create';render();return;}
   if(!currentFlow())newFlow();
+  if(upgradeProductJourney(currentFlow()))persist();
+  beginEditorSession(currentFlow());
+  prepareMessageReveal(currentFlow(),renderEditor);
   if(productJourneyFor(currentFlow())?.status==='running')currentFlow().busy='product-images';
-  document.querySelector('title').setAttribute('translate','no');document.title=currentFlow().name+' · 蔚博智造工作台';document.getElementById('app').innerHTML=editor(currentFlow());requestAnimationFrame(drawWires);
+  document.querySelector('title').setAttribute('translate','no');document.title=currentFlow().name+' · 蔚博智造工作台';document.getElementById('app').innerHTML=editor(currentFlow());mountConversationFeedback(currentFlow(),document.querySelector('.editor-app'));disposeConversationProgress=mountConversationProgress(document.querySelector('.ai-panel'));requestAnimationFrame(drawWires);
  }else{
   document.querySelector('title').removeAttribute('translate');document.title=(pages[state.page]?.[0]||'灵感社区')+' · 蔚博智造';
-  document.getElementById('app').innerHTML=`${nav()}<div class="site-content"><div class="site-canvas"><div class="network-notice" id="network-notice" ${navigator.onLine?'hidden':''}>${icon('wifi',16)}当前已离线，输入会继续保留。</div>${topbar()}<main id="main" tabindex="-1">${body()}</main></div></div>`;
+  document.getElementById('app').innerHTML=`${nav()}<div class="site-content"><div class="site-canvas"><div class="network-notice" id="network-notice" ${navigator.onLine?'hidden':''}>${icon('wifi',16)}当前已离线，输入会继续保留。</div>${topbar()}<main id="main" class="${['checkout','confirm'].includes(state.page)?'checkout-page':''}" tabindex="-1">${body()}</main></div></div>`;
   if(state.page==='discover')updateResults();
   if(state.page==='resources'&&state.query)searchResources();
  }
@@ -72,17 +93,24 @@ export function render(){
  localizePage();
  mountedPage=state.page;
 }
-export function renderEditor(){if(state.page!=='editor')return;const scroll=document.getElementById('chat-body')?.scrollTop||0;const focus=document.activeElement;const focusId=focus?.id;const selection=typeof focus?.selectionStart==='number'?focus.selectionStart:null;render();const chat=document.getElementById('chat-body');if(chat)chat.scrollTop=scroll;if(focusId){const next=document.getElementById(focusId);next?.focus({preventScroll:true});if(selection!==null&&next?.setSelectionRange)next.setSelectionRange(selection,selection);}}
+export function renderEditor(){if(state.page!=='editor')return;const oldChat=document.getElementById('chat-body'),scroll=oldChat?.scrollTop||0,follow=oldChat&&oldChat.scrollHeight-scroll-oldChat.clientHeight<64;const focus=document.activeElement;const focusId=focus?.id;const selection=typeof focus?.selectionStart==='number'?focus.selectionStart:null;render();const chat=document.getElementById('chat-body');if(chat){chat.scrollTop=follow?chat.scrollHeight:scroll;chat.dispatchEvent(new Event('scroll'));}if(focusId){const next=document.getElementById(focusId);next?.focus({preventScroll:true});if(selection!==null&&next?.setSelectionRange)next.setSelectionRange(selection,selection);}}
 function editorReturnTarget(){return editorOriginPages.has(editorOrigin)?editorOrigin:'my';}
 function flowHasSavedContent(flow){return Boolean(flow&&(flow.idea?.trim()||flow.messages?.length||flow.modules?.length||flow.wires?.length||flow.plan));}
 function requestEditorExit(){
  const flow=currentFlow();
  if(!flow||!flowHasSavedContent(flow)){navigate(editorReturnTarget());return;}
- showModal(`<div class="simple-modal editor-exit-modal"><button class="dialog-close icon-button" data-close aria-label="继续编辑">${icon('close',18)}</button><h2 id="dialog-title">保存当前方案？</h2><p>当前方案会自动保存到“我的项目”。保存后可从“我的 → 我的项目”继续创作、查看连线和备料信息。</p><div class="editor-exit-actions"><button class="primary" data-editor-exit="save">保存并返回${icon('arrow',16)}</button></div><button class="text-button editor-exit-cancel" data-close>继续编辑</button></div>`, 'editor-exit-dialog');
+ cancelPendingChat(flow);renderEditor();
+ const isNew=editorSessionIsNew();
+ const detail=isNew
+  ?'将这份方案保存到“我的项目”，之后可继续编辑、查看方案资料与报价信息。选择“不保存，放弃方案”将删除这份新草稿。'
+  :'将本次修改保存到当前方案。选择“不保存，恢复原方案”将撤销本次进入编辑器后的改动。';
+ const discardLabel=isNew?'不保存，放弃方案':'不保存，恢复原方案';
+ showModal(`<div class="simple-modal editor-exit-modal"><button class="dialog-close icon-button" data-close aria-label="关闭退出提示">${icon('close',18)}</button><h2 id="dialog-title">退出当前编辑？</h2><p>${detail}</p><div class="editor-exit-actions"><button class="secondary editor-exit-discard" data-editor-exit="discard">${discardLabel}</button><button class="primary" data-editor-exit="save">保存并返回${icon('arrow',16)}</button></div><p id="editor-exit-error" class="form-error" role="alert" hidden></p></div>`, 'editor-exit-dialog');
 }
 export function navigate(page,id=''){
  const previousPage=state.page;
- if(page==='editor'&&!state.auth){requireAuth(()=>navigate(page,id));return;}
+ if(page==='success')finishEditorSession(state.flowId);
+ if(['checkout','confirm','success'].includes(page)&&!state.auth){const flowId=state.flowId;requireAuth(()=>{state.flowId=flowId;navigate(page,id);});return;}
  if(page==='editor'&&previousPage!=='editor'&&!['checkout','confirm','success'].includes(previousPage))editorOrigin=editorOriginPages.has(previousPage)?previousPage:'my';
  closeModal();document.body.classList.remove('mobile-nav-open');
  state.page=page;state.query='';resourceQuery='';if(id)orderId=id;
@@ -127,16 +155,21 @@ document.addEventListener('click',e=>{
   });return;
  }
  if(b.dataset.templateDetail){showModal(templateDetails(b.dataset.templateDetail),'template-dialog');return;}
- if(b.dataset.startTemplate){const t=templateById(b.dataset.startTemplate);if(t)requireAuth(()=>{state.templateId=t.id;newFlow(translate(t.prompt),'',t.id);navigate('editor');sendChat(translate(t.prompt));});return;}
+ if(b.dataset.startTemplate){const t=templateById(b.dataset.startTemplate);if(t){state.templateId=t.id;newFlow(translate(t.prompt),'',t.id);navigate('editor');sendChat(translate(t.prompt));}return;}
  if(b.dataset.selectTemplate){const t=templateById(b.dataset.selectTemplate);if(!t)return;state.templateId=t.id;persist();document.querySelector('.template-picker').outerHTML=templatePicker(t.id);document.querySelector(`[data-select-template="${t.id}"]`)?.focus({preventScroll:true});return;}
  if(b.hasAttribute('data-editor-back')){requestEditorExit();return;}
  if(b.dataset.editorExit){
   const target=editorReturnTarget(),action=b.dataset.editorExit;
+  if(action==='discard'){
+   const result=discardEditorSession(currentFlow());
+   if(!result.ok){const error=document.getElementById('editor-exit-error');error.hidden=false;error.textContent=result.reason==='conflict'?'其他窗口已更新此方案，请刷新后再决定是否放弃。':'未能放弃本次编辑，当前内容已保留，请恢复浏览器存储后重试。';return;}
+   closeModal();navigate(target);toast(result.removed?'本次草稿已放弃':'已放弃本次修改，原方案已保留');return;
+  }
   if(action!=='save')return;
   const flow=currentFlow();if(!flow)return;
   const previousSavedAt=flow.savedAt;flow.savedAt=Date.now();
   if(!persist()){if(previousSavedAt===undefined)delete flow.savedAt;else flow.savedAt=previousSavedAt;toast('保存未完成，请恢复浏览器存储后重试。当前方案仍保留在编辑页。');return;}
-  closeModal();navigate(target);toast('方案已保存，可在“我的 → 我的项目”中继续创作。');
+  finishEditorSession(flow.id);closeModal();navigate(target);toast('方案已保存，可在“我的 → 我的项目”中继续创作。');
   return;
  }
  if(b.dataset.page){navigate(b.dataset.page);return;}
@@ -149,7 +182,7 @@ document.addEventListener('click',e=>{
  if(b.hasAttribute('data-reset')){state.query='';state.category='发现';state.code=false;state.bom=false;const input=document.getElementById('global-search');if(input)input.value='';if(state.page==='resources')searchResources();else updateResults();input?.focus({preventScroll:true});}
  if(b.hasAttribute('data-show-kits')){state.category='教育';navigate('discover');}
  if(b.dataset.myTab){state.myTab=b.dataset.myTab;const url=new URL(location.href);url.searchParams.set('tab',state.myTab);history.replaceState({},'',url);render();document.querySelector(`[data-my-tab="${state.myTab}"]`)?.focus({preventScroll:true});}
- if(b.dataset.projectDelete){const id=b.dataset.projectDelete,project=state.projects.find(item=>(item.flowId||item.id)===id),flow=state.flows[id];if(!project&&!flow)return;const name=flow?.name||project?.name||'未命名方案';showModal(`<div class="simple-modal project-delete-modal"><button class="dialog-close icon-button" data-close aria-label="取消删除">${icon('close',18)}</button><h2 id="dialog-title">删除方案？</h2><p>${esc(name)}</p><p>删除后会移除这份方案及其设计内容，已经创建的订单记录会保留。</p><div class="address-form-actions"><button class="secondary" data-close>取消</button><button class="secondary project-delete-confirm" data-project-delete-confirm data-value="${esc(id)}">确认删除</button></div></div>`,'project-delete-dialog');return;}
+ if(b.dataset.projectDelete){const id=b.dataset.projectDelete,project=state.projects.find(item=>(item.flowId||item.id)===id),flow=state.flows[id];if(!project&&!flow)return;const name=flow?.name||project?.name||'未命名方案';showModal(`<div class="simple-modal project-delete-modal"><button class="dialog-close icon-button" data-close aria-label="取消删除">${icon('close',18)}</button><h2 id="dialog-title">删除方案？</h2><p translate="no">${esc(name)}</p><p>删除后会移除这份方案及其设计内容，已经创建的订单记录会保留。</p><div class="address-form-actions"><button class="secondary" data-close autofocus>取消</button><button class="secondary project-delete-confirm" data-project-delete-confirm data-value="${esc(id)}">确认删除</button></div></div>`,'project-delete-dialog');return;}
  if(b.hasAttribute('data-project-delete-confirm')){const saved=removeProject(b.dataset.value);closeModal();state.myTab='projects';render();toast(saved?'方案已删除':'删除尚未保存，请恢复存储后重试');return;}
  if(b.dataset.edit){state.flowId=b.dataset.edit;persist();navigate('editor');}
  if(b.dataset.promptTemplate){const t=templateById(b.dataset.promptTemplate);if(!t)return;state.templateId=t.id;const input=document.getElementById('idea');input.value=translate(t.prompt);input.placeholder=t.prompt;input.dispatchEvent(new Event('input',{bubbles:true}));document.getElementById('chosen-template').textContent='当前方案：'+t.name;document.querySelectorAll('[data-prompt-template]').forEach(el=>{const selected=el.dataset.promptTemplate===t.id;el.classList.toggle('selected',selected);el.setAttribute('aria-pressed',selected);const status=el.querySelector('svg');if(status)status.outerHTML=icon(selected?'check':'plus',14);});persist();input.focus({preventScroll:true});return;}
@@ -163,7 +196,7 @@ document.addEventListener('input',e=>{
 document.addEventListener('change',e=>{if(e.target.id==='sort'){state.sort=e.target.value;updateResults();}});
 document.addEventListener('submit',e=>{if(e.target.id!=='idea-form')return;e.preventDefault();const idea=document.getElementById('idea').value.trim();if(!idea)return;if(currentCreationRoute()!=='boutique'){const saved=saveRouteDraft(state);toast(saved?'需求已保存，可在当前路线继续编辑':'存储不可用，需求暂存在当前页面');return;}const flow=newFlow(idea,'',state.templateId);flow.creationRoute='boutique';persist();navigate('editor');sendChat(idea);});
 document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){const search=document.getElementById('global-search');if(search){e.preventDefault();search.focus();}}});
-window.addEventListener('popstate',()=>{closeModal();const params=new URLSearchParams(location.search);const nextPage=params.get('page')||'discover';if(nextPage==='editor')editorOrigin=params.get('from')||editorOrigin;else if(!['checkout','confirm'].includes(nextPage))editorOrigin='';state.page=nextPage;if(nextPage==='my')state.myTab=['projects','saved','orders'].includes(params.get('tab'))?params.get('tab'):'projects';orderId=params.get('order')||'';const flow=params.get('flow');if(flow&&state.flows[flow])state.flowId=flow;render();if(params.get('project'))detail(params.get('project'));});
+window.addEventListener('popstate',()=>{closeModal();const params=new URLSearchParams(location.search);const nextPage=params.get('page')||'create';if(nextPage==='editor')editorOrigin=params.get('from')||editorOrigin;else if(!['checkout','confirm'].includes(nextPage))editorOrigin='';state.page=nextPage;if(nextPage==='my')state.myTab=['projects','saved','orders'].includes(params.get('tab'))?params.get('tab'):'projects';orderId=params.get('order')||'';const flow=params.get('flow');if(flow&&state.flows[flow])state.flowId=flow;render();if(params.get('project'))detail(params.get('project'));});
 window.addEventListener('storage',e=>{if(e.key==='weibo-stack-prototype-v2'){toast('另一个窗口修改了项目；刷新页面可读取最新记录，当前输入暂时保留。');}});
 for(const event of ['online','offline'])window.addEventListener(event,()=>{const notice=document.getElementById('network-notice');if(notice)notice.hidden=navigator.onLine;toast(navigator.onLine?'网络已恢复':'当前离线，输入会继续保留');});
 render();

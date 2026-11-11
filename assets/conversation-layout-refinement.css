@@ -1,0 +1,75 @@
+/* Conversation review refinement: keep the visual focus on the supplied design image. */
+.editor-workspace{
+  grid-template-columns:410px minmax(0,1fr);
+}
+
+@media(min-width:1600px){
+  .editor-workspace{
+    grid-template-columns:450px minmax(0,1fr);
+  }
+}
+
+@media(max-width:1250px) and (min-width:761px){
+  .editor-workspace{
+    grid-template-columns:400px minmax(0,1fr);
+  }
+}
+
+.product-canvas-tabs{
+  padding-block:10px;
+}
+
+.product-canvas-image{
+  margin-top:10px;
+}
+
+.product-canvas-image>button{
+  padding:8px;
+}
+
+.product-canvas-image img{
+  transform:scale(1.04);
+  transform-origin:center;
+}
+
+.product-canvas-caption{
+  padding:14px 24px 20px;
+}
+
+.product-canvas-caption strong{
+  font-size:15px;
+}
+
+.product-canvas-caption p{
+  margin-top:7px;
+  font-size:13px;
+  line-height:1.9;
+}
+
+.chat-message{
+  font-size:14px;
+}
+
+.assistant-message p{
+  font-size:14px;
+  line-height:1.8;
+}
+
+.planter-stage-copy>strong{
+  font-size:14px;
+}
+
+@media(max-width:760px){
+  .chat-message{font-size:13px}
+  .assistant-message p{font-size:13px;line-height:1.85}
+  .product-canvas-tabs{padding-block:8px}
+  .product-canvas-image{margin-top:8px}
+  .product-canvas-image img{transform:scale(1.02)}
+  .product-canvas-caption{padding:12px 14px 16px}
+  .product-canvas-caption strong{font-size:14px}
+  .product-canvas-caption p{font-size:12px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .product-canvas-image img{transform:none}
+}

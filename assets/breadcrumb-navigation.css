@@ -1,0 +1,27 @@
+/* Shared return control for nested order pages, alongside their location trail. */
+.breadcrumb-bar{--breadcrumb-gap:var(--wb-space-12);display:flex;align-items:center;gap:var(--breadcrumb-gap);min-width:0}
+.breadcrumb-bar .breadcrumb{min-width:0}
+.breadcrumb-back{display:inline-flex;align-items:center;justify-content:center;flex:0 0 var(--wb-control-height);width:var(--wb-control-height);height:var(--wb-control-height);border-radius:var(--wb-radius-sm);color:var(--wb-text-secondary);background:transparent;text-decoration:none;transition:background var(--wb-motion-fast),color var(--wb-motion-fast)}
+.breadcrumb-back>svg{transform:rotate(180deg);flex-shrink:0}
+.breadcrumb-back:hover{background:var(--wb-surface);color:var(--wb-text)}
+.breadcrumb-back:active{background:var(--wb-info-bg);color:var(--wb-action-pressed)}
+.breadcrumb-back:focus-visible{outline:2px solid var(--wb-focus);outline-offset:2px}
+.breadcrumb-divider{width:1px;height:20px;flex:0 0 1px;background:var(--wb-border-control);opacity:.35}
+html[data-theme="engineering"] .breadcrumb-back:active{color:var(--wb-action);background:var(--wb-info-bg)}
+html[data-theme] main.checkout-page{padding-top:var(--wb-space-8)}
+.checkout-page .checkout-intro{padding-top:0}
+.checkout-page .checkout-intro h1{margin-top:0}
+[dir="rtl"] .breadcrumb-back>svg{transform:none}
+@media(prefers-reduced-motion:reduce){.breadcrumb-back{transition:none}}
+
+/* Shared return control: circular white surface with a quiet left chevron. */
+.wb-back-control{display:inline-flex;align-items:center;justify-content:center;width:var(--wb-control-height);height:var(--wb-control-height);min-width:var(--wb-control-height);border-radius:50%;background:#fff;color:var(--wb-text);border:0;box-shadow:0 2px 10px rgb(9 17 38 / 7%);transition:background var(--wb-motion-fast),color var(--wb-motion-fast),box-shadow var(--wb-motion-fast),transform var(--wb-motion-fast)}
+.editor-header>.wb-back-control{width:var(--wb-control-height);min-width:var(--wb-control-height);min-height:var(--wb-control-height)}
+.wb-back-control>svg{transform:rotate(180deg)!important;flex-shrink:0;stroke-width:1.8}
+.wb-back-control:hover{background:#f7f8fb;color:var(--wb-action);box-shadow:0 4px 14px rgb(9 17 38 / 12%)}
+.wb-back-control:active{background:#eef1f8;color:var(--wb-action-pressed);transform:translateY(1px)}
+.wb-back-control:focus-visible{outline:2px solid var(--wb-focus);outline-offset:3px}
+html[data-theme="engineering"] .wb-back-control{background:#fff;color:#202531;box-shadow:0 3px 14px rgb(0 0 0 / 20%)}
+html[data-theme="engineering"] .wb-back-control:hover{background:#f0f2f6;color:var(--wb-action)}
+[dir="rtl"] .wb-back-control>svg{transform:none!important}
+@media(prefers-reduced-motion:reduce){.wb-back-control{transition:none}}
