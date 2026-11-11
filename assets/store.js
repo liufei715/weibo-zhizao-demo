@@ -1,13 +1,16 @@
-import {templateById} from './product-templates.js?v=20261027-web-r4';
+import {templateById} from './product-templates.js?v=20261029-structure-r2';
 const key='weibo-stack-prototype-v2';
 const sessionKey='weibo-stack-session-v1';
 let disk={},session={};
 try{disk=JSON.parse(localStorage.getItem(key)||localStorage.getItem('weibo-stack-prototype-v1')||'{}')||{};session=JSON.parse(sessionStorage.getItem(sessionKey)||'{}')||{};}catch{}
 const list=(value)=>Array.isArray(value)?value:[];
 let savedFlows=JSON.stringify(disk.flows||{});
+const createdFlowIds=new Set();
+export const consumeNewFlowFlag=id=>createdFlowIds.delete(id);
+export const persistedFlowSnapshot=id=>JSON.parse(savedFlows)[id];
 export const state={
   theme:document.documentElement.dataset.theme||'light',
-  page:new URLSearchParams(location.search).get('page')||'discover',
+  page:new URLSearchParams(location.search).get('page')||'create',
   category:'发现',code:false,bom:false,query:'',sort:'newest',myTab:['projects','saved','orders'].includes(new URLSearchParams(location.search).get('tab'))?new URLSearchParams(location.search).get('tab'):'projects',collapsed:false,
   likes:list(disk.likes),bookmarks:list(disk.bookmarks),comments:disk.comments||{},projects:list(disk.projects),deletedProjectIds:list(disk.deletedProjectIds),orders:list(disk.orders),deletedOrderIds:list(disk.deletedOrderIds),
   flows:disk.flows||{},flowId:disk.flowId||'',idea:disk.idea||'',templateId:templateById(disk.templateId)?disk.templateId:'planter',
@@ -44,7 +47,7 @@ export function persist(){
     for(const field of ['projects','orders']){const ids=new Set(state[field].map(item=>item.id));for(const item of list(latest[field]))if(!ids.has(item.id)&&!(field==='projects'&&state.deletedProjectIds.includes(item.flowId||item.id)))state[field].push(item);}
     applyProjectDeletions();applyOrderDeletions();
     const {likes,bookmarks,comments,projects,deletedProjectIds,orders,deletedOrderIds,flows,flowId,idea,templateId,balance}=state;
-    const revision=Date.now();localStorage.setItem(key,JSON.stringify({likes,bookmarks,comments,projects,deletedProjectIds,orders,deletedOrderIds,flows,flowId,idea,templateId,balance,revision}));savedFlows=JSON.stringify(flows);state.revision=revision;sessionStorage.setItem(sessionKey,JSON.stringify({auth:state.auth,addresses:state.addresses,addressId:state.addressId,orderAddresses:state.orderAddresses}));state.storageError=false;return true;
+    const revision=Date.now();localStorage.setItem(key,JSON.stringify({likes,bookmarks,comments,projects,deletedProjectIds,orders,deletedOrderIds,flows,flowId,idea,templateId,balance,revision}));sessionStorage.setItem(sessionKey,JSON.stringify({auth:state.auth,addresses:state.addresses,addressId:state.addressId,orderAddresses:state.orderAddresses}));savedFlows=JSON.stringify(flows);state.revision=revision;state.storageError=false;return true;
   }catch{state.storageError=true;return false;}
 }
 export function currentFlow(){return state.flows[state.flowId];}
@@ -54,7 +57,7 @@ export function newFlow(idea='',source='',templateId=''){
   const name=source||(template?template.name+' · 我的方案':'未命名项目');
   const flow={id,name,idea,messages:[],modules:[],wires:[],plan:false,wireSuggested:false,view:'design',canvasMode:'spatial',positions:{esp32:{x:16,y:37},sensor:{x:65,y:20},oled:{x:65,y:62}},zoom:1,selected:'',code:defaultCode,procurement:{esp32:1,sensor:1,oled:1},selectedItems:['esp32','sensor','oled'],remarks:'',stage:'idea',updatedAt:Date.now()};
   if(template){Object.assign(flow,{templateId:template.id,positions:structuredClone(template.positions),code:template.code,procurement:Object.fromEntries(template.modules.map(m=>[m.id,1])),selectedItems:template.modules.map(m=>m.id),orderDetails:{quantity:1,delivery:'assembled',finish:'按原方案',usage:'',schedule:'待沟通'}});}
-  state.flowId=id;state.flows[id]=flow;state.projects.unshift({id,name,source,flowId:id});persist();return flow;
+  createdFlowIds.add(id);state.flowId=id;state.flows[id]=flow;state.projects.unshift({id,name,source,flowId:id});persist();return flow;
 }
 export function updateFlowName(flow,name){flow.name=name.trim().slice(0,60)||'未命名项目';const project=state.projects.find(p=>p.id===flow.id);if(project)project.name=flow.name;persist();}
 export function removeProject(projectId){const project=state.projects.find(item=>(item.flowId||item.id)===projectId);const id=project?.flowId||project?.id||projectId;if(!project&&!state.flows[id])return false;state.deletedProjectIds=[...new Set([...state.deletedProjectIds,id])];applyProjectDeletions();if(state.flowId===id)state.flowId='';return persist();}

@@ -107,6 +107,15 @@ html[data-theme] .creation-scene .prompt-list .chip:active{transform:translateY(
 .editor-exit-modal{padding:32px}
 .editor-exit-modal h2{margin-bottom:12px}
 .editor-exit-modal>p{margin-bottom:22px}
-.editor-exit-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.editor-exit-actions button{min-height:40px}
-.editor-exit-cancel{display:block;margin:18px auto 0}
+.editor-exit-actions{display:flex;align-items:center;gap:16px;flex-wrap:nowrap}
+.editor-exit-actions button{min-height:40px;white-space:nowrap}
+
+/* Three explicit exit choices, without making discard the default focus. */
+html[data-theme] dialog.editor-exit-dialog{width:min(560px,calc(100vw - 32px))}
+.editor-exit-actions{flex-wrap:wrap;gap:var(--wb-space-12)}
+.editor-exit-actions button{min-height:var(--wb-control-height)}
+.editor-exit-actions .editor-exit-discard{color:var(--wb-text-secondary);border:1px solid var(--wb-border-control);background:transparent;box-shadow:none}
+.editor-exit-actions .editor-exit-discard:hover{color:var(--wb-danger);border-color:currentColor}
+.editor-exit-actions .editor-exit-discard:active{background:var(--wb-danger-bg)}
+.editor-exit-actions button:focus-visible{outline:2px solid var(--wb-focus);outline-offset:3px}
+.editor-exit-modal #editor-exit-error{margin:var(--wb-space-16) 0 0}

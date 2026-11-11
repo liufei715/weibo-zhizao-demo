@@ -1,6 +1,7 @@
 // Update presentation of older assistant replies without rewriting saved conversations.
-export function assistantText(value){
+export function assistantText(value,product=false){
  let text=String(value||'');
+ if(product)text=text.replaceAll('确认是否继续接线','确认是否继续查看方案').replaceAll('先添加模块，再确认连线和交付详情。','查看方案资料，再确认交付详情与报价。').replaceAll('可以查看方案详情、调整模块和连线，再填写订单详情。','可以查看方案资料，再填写交付需求并查看报价。').replaceAll('可以，开始整理连线。','好的，继续查看方案。').replaceAll('完成器件连线后','方案资料整理完成后').replaceAll('查看模块与连线','继续报价');
  const replacements=[
  ['此对话尚未接入真实模型。',''],
  ['当前为本地 AI 对话演示，我用「桌面温湿度显示器」固定模板展示完整流程：','基于「桌面温湿度显示器」方案：'],
