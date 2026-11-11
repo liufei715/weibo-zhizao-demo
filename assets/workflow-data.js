@@ -1,4 +1,4 @@
-import {templateFor} from './product-templates.js?v=20261027-web-r4';
+import {templateFor} from './product-templates.js?v=20261029-structure-r2';
 export const modules=[
  {id:'esp32',name:'ESP32-DevKitC',full:'ESP32-DevKitC 38 引脚 Type-C',role:'主控开发板',kind:'board',price:32,pins:['3V3','GND','GPIO21','GPIO22'],description:'连接传感器与显示屏的主控节点。'},
  {id:'sensor',name:'AHT10',full:'AHT10 温湿度传感器模块',role:'环境感知',kind:'sensor',price:6,pins:['VIN','GND','SDA','SCL'],description:'通过 I²C 总线读取温湿度。'},
@@ -28,6 +28,8 @@ export const modulesFor=flow=>templateFor(flow)?.modules||modules;
 export const connectionsFor=flow=>templateFor(flow)?.connections||connections;
 export const allModules=flow=>modulesFor(flow).every(m=>flow.modules.includes(m.id));
 export const allWires=flow=>allModules(flow)&&connectionsFor(flow).every(c=>flow.wires.some(w=>w.id===c.id));
+// Product quotations require a prepared module list, not manually drawn wires.
+export const readyForQuotation=flow=>templateFor(flow)?allModules(flow)&&(!(flow.productJourney||flow.planterJourney)||(flow.productJourney||flow.planterJourney).status==='complete'):allWires(flow);
 export const layoutFor=flow=>structuredClone(templateFor(flow)?.positions||{esp32:{x:8,y:34},sensor:{x:62,y:15},oled:{x:62,y:62}});
 export const lineCost=(m,quantity)=>m.price===null?null:m.price*quantity;
 export function selectedModules(flow){return modulesFor(flow).filter(m=>flow.modules.includes(m.id)&&flow.selectedItems.includes(m.id));}

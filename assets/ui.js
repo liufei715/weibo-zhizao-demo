@@ -1,8 +1,21 @@
-import {icon} from './icons.js?v=20261027-web-r4';
+import {icon} from './icons.js?v=20261029-structure-r2';
 let focusBefore=null,onClosed=null;
 const modal=document.getElementById('modal');
 export function toast(text){const el=document.getElementById('toast');el.textContent=text;el.hidden=false;clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.hidden=true,4200);}
-export function showModal(html,type='',onClose=null){if(!modal.open)focusBefore=document.activeElement;onClosed=onClose;modal.className=type;document.getElementById('modal-content').innerHTML=html;if(!modal.open)modal.showModal();modal.scrollTop=0;const focus=modal.querySelector('[autofocus],button,input,textarea,select');focus?.focus({preventScroll:true});}
+function prepareModalLayout(type){
+ const content=document.getElementById('modal-content');
+ const compact=['project-delete-dialog','order-delete-dialog','editor-exit-dialog'].includes(type);
+ const wide=['bom-dialog','library-dialog','template-dialog','detail-dialog'].includes(type)||Boolean(content.querySelector('.simulation-preview,.product-flow-preview'));
+ modal.dataset.size=compact?'compact':type==='planter-image-dialog'?'media':type==='auth-dialog'?'auth':wide?'wide':'standard';
+ content.querySelectorAll('.address-form-actions,.editor-exit-actions,.bom-actions').forEach(actions=>actions.classList.add('modal-actions'));
+ if(compact){
+  modal.dataset.intent=type==='editor-exit-dialog'?'save':'delete';
+  const description=[...content.querySelectorAll('.simple-modal>p:not(.form-error)')].at(-1);
+  if(description&&!description.id)description.id='dialog-description';
+  if(description)modal.setAttribute('aria-describedby',description.id);
+ }else{delete modal.dataset.intent;modal.removeAttribute('aria-describedby');}
+}
+export function showModal(html,type='',onClose=null){if(!modal.open)focusBefore=document.activeElement;onClosed=onClose;modal.className=type;document.getElementById('modal-content').innerHTML=html;prepareModalLayout(type);if(!modal.open)modal.showModal();modal.scrollTop=0;const focus=modal.querySelector('[autofocus]')||modal.querySelector('button,input,textarea,select');focus?.focus({preventScroll:true});}
 function finishClose(){const cb=onClosed;onClosed=null;cb?.();if(focusBefore?.isConnected)focusBefore.focus({preventScroll:true});else document.querySelector('main h1,.editor-header input')?.focus({preventScroll:true});}
 export function closeModal(){if(modal.open){modal.close();finishClose();}}
 // A queued close event from the previous dialog must not close the new one.

@@ -1,4 +1,4 @@
-import {icon,esc} from './icons.js?v=20261027-web-r4';
+import {icon,esc} from './icons.js?v=20261029-structure-r2';
 
 // Service amounts supplied by the user; each selected service is charged once.
 export const quoteServices=[
